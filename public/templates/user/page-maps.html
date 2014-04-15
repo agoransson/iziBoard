@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1 ng-model="page.heading">{{ page.heading }}</h1>
+  </div>
+</div>
+
+<div class="row" ng-controller="MarkerController">
+
+  <div class="col-xs-12 col-md-6" ng-controller="MapCtrl">
+
+  <div ng-if="showMap">
+
+      <google-map id="mymap" 
+              center="map.center" 
+              zoom="map.zoom" 
+              draggable="true"                                    
+              mark-click="false"
+              events="map.events">
+              <markers>
+                  <marker ng-repeat="marker in page.markers | filter: search" coords="marker">
+                  </marker>
+              </markers>
+      </google-map>
+
+  </div>.
+    
+  </div>
+
+  <div class="col-xs-12 col-md-6">
+    <h2>Hitta närmaste affär här</h2>
+    <input type="text" class="form-control" placeholder="sök" ng-model="search">
+
+    <div class="marker-item" ng-repeat="marker in page.markers | filter:search">
+      <h3 ng-model="marker.title">{{ marker.title }}</h3>
+      <p ng-model="marker.description">{{ marker.description }}</p>
+    </div>
+
+  </div>
+</div>

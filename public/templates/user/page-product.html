@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1 ng-model="page.heading">{{ page.heading }}</h1>
+  </div>
+
+
+  <div class="col-md-6 col-xs-12" ng-controller="ImageController">
+    <div ng-if="(+page.images.length > 0)">
+      <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
+    </div>
+    <div ng-if="(+page.images.length <= 0)">
+      <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="Drop image here"/>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xs-12">
+
+    <div ng-controller="TextController">
+      <div class="col-xs-12" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
+        <p ng-if="(+text.description.length > 0)" ng-model="text.description" ng-bind-html="text.description | firstLineHeading"></p>
+        <p ng-if="(+text.description.length <= 0)" ng-model="text.description" ph-txt="{{ numCombined }}"></p>
+      </div>
+    </div>
+
+  </div>
+</div>

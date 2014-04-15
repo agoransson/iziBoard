@@ -1,0 +1,52 @@
+<li class="dropdown page-type-selection">
+  <a class="dropdown-toggle">
+    {{ page.type }}
+  </a>
+  <ul class="dropdown-menu">
+    <li ng-repeat="type in pageTypes">
+      <a ng-click="setPageType(type)">{{ type }}</a>
+    </li>
+  </ul>
+</li>
+
+<div class="row">
+  <div class="col-xs-12">
+    <h1 class="edit-menu" contenteditable ng-model="page.heading" strip-br="true" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">{{ page.heading }}</h1>
+    <div class="edit-toolbox" ng-show="showHeadingTools" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">
+      <span class="glyphicon glyphicon-ok" ng-click="savePage(page)"></span>
+    </div>
+  </div>
+</div>
+
+<div class="row" ng-controller="MarkerController">
+  <div class="col-xs-6" ng-controller="MapCtrl">
+
+  <div ng-if="showMap">
+
+      <google-map id="mymap" 
+              center="map.center" 
+              zoom="map.zoom" 
+              draggable="true"                                    
+              mark-click="false"
+              events="map.events">
+              <markers>
+                  <marker ng-repeat="marker in page.markers | filter: search" coords="marker">
+                  </marker>
+              </markers>
+      </google-map>
+
+  </div>.
+    
+  </div>
+
+  <div class="col-xs-6">
+    <h2>Hitta närmaste affär här</h2>
+    <input type="text" class="form-control" placeholder="sök" ng-model="search">
+
+    <div class="marker-item" ng-repeat="marker in page.markers | filter:search">
+      <h3 contenteditable ng-model="marker.title" strip-br="true">{{ marker.title }}</h3><h3> <small><span class="glyphicon glyphicon-ok-sign" ng-click="saveMarker(marker)"></span></small> <small><span class="glyphicon glyphicon-remove-sign" ng-click="deleteMarker(marker)"></span></small></h3>
+      <p contenteditable ng-model="marker.description" strip-br="true">{{ marker.description }}</p>
+    </div>
+
+  </div>
+</div>

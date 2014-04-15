@@ -1,0 +1,10 @@
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h1 ng-model="page.heading">{{ page.heading }}</h1>
+      </div>
+      <div class="col-md-{{ 12 / page.texts.length }}" ng-repeat="text in page.texts" ng-controller="TextController" ng-if="(+page.texts.length > 0)">
+        <p ng-model="text.description">{{ text.description }}</p>
+        <p ng-if="(+text.description.length <= 0)" ng-model="text.description" ph-txt="{{ numCombined }}"></p>
+      </div>
+    </div>

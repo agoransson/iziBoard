@@ -1,0 +1,76 @@
+<li class="dropdown page-type-selection">
+  <a class="dropdown-toggle">
+    {{ page.type }}
+  </a>
+  <ul class="dropdown-menu">
+    <li ng-repeat="type in pageTypes">
+      <a ng-click="setPageType(type)">{{ type }}</a>
+    </li>
+  </ul>
+</li>
+
+<div class="row">
+  <div class="col-md-8 col-xs-12" ng-controller="ImageController">
+    <div ng-if="(+page.images.length > 0)" ng-file-drop="onFileSelect($files, page)" ng-file-drag-over-class="optional-css-class">
+      <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
+    </div>
+    <div ng-if="(+page.images.length <= 0)" ng-file-drop="onFileSelect($files, page)" ng-file-drag-over-class="optional-css-class">
+      <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="Drop image here"/>
+    </div>
+  </div>
+
+  <div class="col-md-4 visible-md visible-lg news-container">
+    <h2>Nyheter <small><span class="glyphicon glyphicon-plus-sign" ng-click="openNewsModal()"></span></small></h2>
+    <div ng-repeat="n in news | limitTo: quantity | orderBy:orderProp:orderType" class="news-item">
+      <h4>{{ n.title }} <small><span class="glyphicon glyphicon-minus-sign" ng-click="deleteNews(n)"></span></small> <small><span class="glyphicon glyphicon-question-sign" ng-click="openNewsModal(n)"></span></small></h4>
+      <p>{{ n.body | limitTo:100 }}...</p>
+      <p>{{ n.created_at | brDateFilter | date:"yyyy-MM-dd" }}</p>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <h1 class="edit-menu" contenteditable ng-model="page.heading" strip-br="true" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">{{ page.heading }}</h1>
+    <div class="edit-toolbox" ng-show="showHeadingTools" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">
+      <span class="glyphicon glyphicon-ok" ng-click="savePage(page)"></span>
+    </div>
+  </div>
+
+  <div ng-controller="TextController">
+    <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
+      <p contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true">{{ text.description }}</p>
+      <p ng-if="(+text.description.length <= 0)" contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true" ph-txt="{{ numCombined }}"></p>
+      <div class="edit-toolbox" ng-show="showTextTools" ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false">
+        <span class="glyphicon glyphicon-remove-sign" ng-click="deleteText(text)"></span><br/>
+        <span class="glyphicon glyphicon-ok" ng-click="savePage(page)"></span><br/>
+        <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Lipsum...')"></span>
+      </div>
+    </div>
+    <div ng-if="(+page.texts.length <= 0)">
+      <div class="col-xs-12">
+        <span class="glyphicon glyphicon-ok-sign" ng-click="newTextable(page, 'Lipsum...')"></span> Add new column
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script id="newsModalContent.html" type="text/ng-template">
+  <div class="modal-header">
+    <h3>Edit news item</h3>
+  </div>
+  <div class="modal-body">
+    <input class="form-control" type="text" placeholder="title" ng-model="newsitem.title">
+    <textarea class="form-control" rows="3" placeholder="body" ng-model="newsitem.body"></textarea>
+  </div>
+  <div class="modal-footer">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" ng-click="newsModalOk()">OK</button>
+      <button type="button" class="btn btn-warning" ng-click="newsModalCancel()">Cancel</button>
+    </div>
+  </div>
+</script>
