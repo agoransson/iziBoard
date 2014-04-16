@@ -89,7 +89,7 @@ Route::post('imageable', function(){
 
   $filename = $name . '.' . $ext;
 
-  $image = Image::make(Input::file('file')->getRealPath());
+  $image = \Image::make(Input::file('file')->getRealPath());
 
   File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
 
