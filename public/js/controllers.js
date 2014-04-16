@@ -28,7 +28,13 @@ controllers.controller('PageController', function($scope, $http) {
     $scope.selectedPage = $scope.pages[0];
   });
 
-  $scope.pageTypes = ['front', 'text', 'news', 'carousel', 'maps', 'product'];
+  $scope.pageTypes = ['front', 'text', 'news', 'carousel', 'maps'];
+
+  // TODO: Do a GET on settings for products (if it's enabled)
+  $scope.productsEnabled = true;
+  if( $scope.productsEnabled ){
+    $scope.pageTypes.push('product');
+  }
 
   $scope.newPage = function() {
     var page = {
@@ -36,19 +42,6 @@ controllers.controller('PageController', function($scope, $http) {
       title: 'my title',
       heading: 'my heading',
       description: 'my description'
-    };
-    $http.post('pages', page).success(function(data){
-      $scope.pages.push(data);
-      $scope.selectedPage = data;
-    });
-  }
-
-  $scope.newProduct = function() {
-    var page = {
-      type: 'product',
-      title: 'my product',
-      heading: 'my product',
-      description: 'my product description'
     };
     $http.post('pages', page).success(function(data){
       $scope.pages.push(data);
@@ -79,6 +72,41 @@ controllers.controller('PageController', function($scope, $http) {
 
   $scope.setPageType = function(type) {
     $scope.selectedPage.type = type;
+  }
+
+  $scope.newProduct = function() {
+    var page = {
+      type: 'product',
+      title: 'my product',
+      heading: 'my product',
+      description: 'my product description'
+    };
+    $http.post('pages', page).success(function(data){
+      $scope.pages.push(data);
+      $scope.selectedPage = data;
+    });
+  }
+
+  $scope.deleteProduct = function(page) {
+    if( $scope.selectedPage.type == 'product' ){
+      $http.delete('pages/'+page.id).success(function(data){
+        var index = $scope.pages.indexOf(page);
+        $scope.pages.splice(index,1);
+        if( $scope.pages.length > 0 )
+          $scope.selectedPage = $scope.pages[index-1];
+      });  
+    } else {
+      // TODO: Make dialog feedback saying that the page is not a product
+    }
+  }
+
+  $scope.toggleProducts = function() {
+    $scope.productsEnabled = !$scope.productsEnabled;
+    if( $scope.productsEnabled ){
+      $scope.pageTypes.push('product');
+    } else {
+      $scope.pageTypes.pop('product');
+    }
   }
 
 });

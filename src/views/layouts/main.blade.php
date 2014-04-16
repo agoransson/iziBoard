@@ -113,7 +113,6 @@
   <body ng-controller="PageController" >
 
     @include('board::layouts.nav')
-
     <div class="container main-content" ng-controller="NewsController">
       @section('content')
       @show
