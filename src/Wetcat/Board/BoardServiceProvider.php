@@ -38,7 +38,7 @@ class BoardServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app->register('Intervention\Image\ImageServiceProvider');
 	}
 
 	public function boot()
@@ -47,7 +47,11 @@ class BoardServiceProvider extends ServiceProvider {
 
     include __DIR__.'/../../routes.php';
 
-    //AliasLoader::getInstance()->alias('iziBoard', 'Wetcat\Board\iziBoard');
+    $this->app->booting(function()
+		{
+		  $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+		  $loader->alias('Image', 'Intervention\Image\Facades\Image');
+		});
 	}
 
 	/**
