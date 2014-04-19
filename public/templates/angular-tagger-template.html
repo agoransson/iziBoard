@@ -1,0 +1,71 @@
+<span
+  class="form-control"
+  ng-click="handleOuterClick($event)"
+  ng-class="{'angular-tagger--single': config.single}"
+  ng-focus="handleOuterFocus($event)">
+  
+  <span class="angular-tagger__wrapper">
+
+    <span 
+      class="angular-tagger__holder"
+      ng-repeat="tag in tags">
+
+        <span 
+          tagger-contenteditable="true"
+          ng-model="$parent.query"
+          ng-show="pos == $index"
+          ng-keydown="handleKeyDown($event)"
+          ng-keyup="handleKeyUp($event)"
+          ng-click="handleInputClick($event)"
+          ng-blur="handleBlur($index, $event)"
+          class="angular-tagger__input">
+        </span>
+
+        <span class="angular-tagger__tag">
+          {{ config.displayFun(tag.title) }}
+          <span
+            class="angular-tagger-tag__delete"
+            ng-mousedown="handleMousedown()"
+            ng-mouseup="handleMouseup()"
+            ng-click="removeTag($index, $event)">x</span>
+        </span>
+        
+    </span>
+  </span>
+  
+  <span tagger-contenteditable="true"
+    ng-model="query"
+    ng-show="(config.single && !tags.length) || (!config.single && pos == tags.length)"
+    ng-keydown="handleKeyDown($event)"
+    ng-keyup="handleKeyUp($event)"
+    ng-click="handleInputClick($event)"
+    placeholder="{{ placeholder }}"
+    ng-blur="handleBlur(tags.length, $event)"
+    ng-focus="handleFocus($event)"
+    class="angular-tagger__input">
+  </span>
+
+  <div class="angular-tagger__hook">
+    <ul ng-show="expanded" class="angular-tagger__matching">
+      <li class="angular-tagger__matching-item"
+        ng-mousedown="handleMousedown()"
+        ng-mouseup="handleMouseup()"
+        ng-mouseover="selectItem(-1)"
+        ng-click="handleItemClick($event)"
+        ng-hide="config.disableNew || !query.length || hideNew"
+        ng-class='{"angular-tagger__matching-item--selected": selected == -1}'>
+        Add: {{ query }}...
+      </li>
+      <li
+        ng-repeat="e in matching"
+        ng-mousedown="handleMousedown()"
+        ng-mouseup="handleMouseup()"
+        ng-mouseover="selectItem($index)"
+        ng-click="handleItemClick($event)"
+        class="angular-tagger__matching-item"
+        ng-class='{"angular-tagger__matching-item--selected": $index == selected}'>
+        {{ config.displayFun(e.title) }}
+      </li>
+    </ul>
+  </div>
+</span>

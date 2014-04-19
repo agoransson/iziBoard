@@ -17,16 +17,16 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var controllers = angular.module('ekkogourmetControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize']);
+var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger']);
 
 
 
-controllers.controller('PageController', function($scope, $http) {
+iziControllers.controller('PageController', function($scope, $http) {
 
   $http.get('pages').success(function(pages){
     $scope.pages = pages;
     $scope.selectedPage = $scope.pages[0];
-  });
+  }); 
 
   $scope.pageTypes = ['front', 'text', 'news', 'carousel', 'maps'];
 
@@ -111,7 +111,7 @@ controllers.controller('PageController', function($scope, $http) {
 
 });
 
-controllers.controller('TextController', function($scope, $http) {
+iziControllers.controller('TextController', function($scope, $http) {
 
   // This should be fixed for polymorhpism
   $scope.newTextable = function(page, text) {
@@ -135,7 +135,7 @@ controllers.controller('TextController', function($scope, $http) {
 
 
 
-controllers.controller('MapCtrl', function($scope, $http) {
+iziControllers.controller('MapCtrl', function($scope, $http) {
 
   $scope.markers = $scope.selectedPage.markers;
 
@@ -212,7 +212,7 @@ controllers.controller('MapCtrl', function($scope, $http) {
 
 
 
-controllers.controller('MarkerController', function($scope, $http) {
+iziControllers.controller('MarkerController', function($scope, $http) {
 
   $scope.saveMarker = function(marker) {
     console.log(marker);
@@ -231,7 +231,7 @@ controllers.controller('MarkerController', function($scope, $http) {
 
 
 
-controllers.controller('ImageController', function($scope, $upload) {  
+iziControllers.controller('ImageController', function($scope, $upload) {  
   $scope.onFileSelect = function($files, page) {
     //$files: an array of files selected, each file has name, size, and type.
     for (var i = 0; i < $files.length; i++) {
@@ -268,7 +268,7 @@ controllers.controller('ImageController', function($scope, $upload) {
 
 
 
-controllers.controller('NewsController', function($scope, $http, $modal, $log) {
+iziControllers.controller('NewsController', function($scope, $http, $modal, $log) {
 
   $scope.orderProp = 'created_at';
   $scope.quantity = 3;
@@ -281,7 +281,7 @@ controllers.controller('NewsController', function($scope, $http, $modal, $log) {
   $scope.openNewsModal = function(news){
 
     var modalInstance = $modal.open({
-      templateUrl: 'newsModalContent.html',
+      templateUrl: 'packages/wetcat/board/templates/newsModalContent.html',
       controller: NewsInstanceCtrl,
       resolve: {
         item: function () {
@@ -354,6 +354,14 @@ var NewsInstanceCtrl = function ($scope, $modalInstance, $http, item) {
 
 
 
-controllers.controller('FooterController', function($scope, $http){
+iziControllers.controller('FooterController', function($scope, $http){
 
+});
+
+
+iziControllers.controller('CategoryController', function($scope, $http){
+  $http.get('categories').success(function(categories){
+    $scope.categories = categories;
+  });
+  $scope.tags = [];
 });

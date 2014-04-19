@@ -15,7 +15,10 @@
     "autoload": {
         "psr-0": {
             "Wetcat\\Board": "src/"
-        }
+        },
+        "classmap":[
+            "src/migrations"
+        ]
     },
     "minimum-stability": "stable"
 }

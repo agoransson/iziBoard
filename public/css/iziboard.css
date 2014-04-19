@@ -59,3 +59,79 @@ body {
 .admin-input:focus {
   min-width: 200px;
 }
+
+/* General styles */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.img-responsive {
+  margin: 0 auto;
+}
+.main-content {
+  margin-top: 4em;
+}
+
+.fix-heading {
+  display: inline;
+}
+.fix-heading > .glyphicon {
+  cursor: pointer;
+}
+.fix-heading .glyphicon:hover {
+  color: #ccc;
+}
+
+/* Toolbox popup */
+.edit-menu {
+  border:1px solid transparent;
+}
+.edit-menu:hover {
+  border-left: 1px solid #000;
+}
+.edit-toolbox {
+  background: #fff;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 2px 5px 2px 5px;
+  border: 1px solid #000;
+  display: inline-block;
+  z-index: 1000;
+}
+.edit-toolbox > span:hover {
+  cursor: pointer;
+  color: #ccc;
+}
+
+/* News styles */
+.news-container {
+}
+.news-container .glyphicon {
+  cursor: pointer;
+}
+.news-container .glyphicon:hover {
+  color: #ccc;
+}
+.news-item {
+}
+
+/* Page selection dropdown */
+.page-type-selection {
+  list-style: none;
+}
+
+/* Map styles */
+.angular-google-map-container { height: 400px; }
+.marker-item > h3 {
+  display: inline;
+}
+.marker-item > h3 .glyphicon {
+  cursor: pointer;
+}
+.marker-item > h3 .glyphicon:hover {
+  color: #ccc;
+}
+
+/* Typeahead */
+.active {
+  background-color: #C44741;
+  color: #f2f2f2;
+}

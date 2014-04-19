@@ -35,11 +35,21 @@ use Wetcat\Board\Models\News;
 use Wetcat\Board\Models\Page;
 use Wetcat\Board\Models\Photo;
 use Wetcat\Board\Models\Text;
+use Wetcat\Board\Models\Category;
+
+
+
+/* ============ ROOT ============= */
 
 Route::get('/', function()
 {
   return View::make('board::index');
 });
+
+
+
+
+/* ============ PAGE ============= */
 
 Route::get('pages', function(){
   return Page::with(array('texts', 'images', 'markers'))->get();
@@ -65,6 +75,12 @@ Route::delete('pages/{id}', function($id){
   return $page;
 });
 
+
+
+
+
+/* ============ TEXT (able) ============= */
+
 Route::post('textables', function(){
   $page = Page::find(Input::get('id'));
   $text = Text::create(Input::all());
@@ -75,6 +91,11 @@ Route::post('textables', function(){
 Route::delete('textables/{id}', function($id){
   $text = Text::find($id)->delete();
 });
+
+
+
+
+/* ============ IMAGE (able) ============= */
 
 Route::post('imageable', function(){
   $path = public_path();
@@ -102,12 +123,25 @@ Route::post('imageable', function(){
   return $photo;
 });
 
+
+
+
+/* ============ NEWS ============= */
+
 Route::get('news', function(){
-  return News::orderBy('created_at', 'DESC')->get();
+  return News::with('categories')->orderBy('created_at', 'DESC')->get();
 });
 
 Route::post('news', function(){
-  $news = News::create(Input::all());
+
+  $data = Input::only('title', 'body');
+  $news = News::create($data);
+
+  $category = Category::find(Input::get('tags')['id']);
+  $news->categories()->save($category);
+  $news->categories();
+
+  return $category;
 });
 
 Route::delete('news/{id}', function($id){
@@ -118,6 +152,11 @@ Route::put('news', function(){
   $news = News::find(Input::get('id'));
   $news->update(Input::all());
 });
+
+
+
+
+/* ============ MARKERS ============= */
 
 Route::post('markers', function(){
   $page = Page::find(Input::get('id'));
@@ -139,4 +178,18 @@ Route::put('markers', function(){
 
 Route::delete('markers/{id}', function($id){
   $marker = Marker::find($id)->delete();
+});
+
+
+
+
+/* ============ CATEGORIES ============= */
+
+Route::get('categories', function(){
+  return Category::all();
+});
+
+Route::post('categories', function(){
+  $category = Category::create(Input::all());
+  return $category;
 });

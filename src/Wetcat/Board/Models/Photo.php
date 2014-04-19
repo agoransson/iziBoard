@@ -1,7 +1,5 @@
 <?php namespace Wetcat\Board\Models;
 
-use \Illuminate\Database\Eloquent\Model as Eloquent;
-
 /*
  * iziBoard
  * Copyright (C) 2014  Andreas Göransson
@@ -21,7 +19,7 @@ use \Illuminate\Database\Eloquent\Model as Eloquent;
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class Photo extends Eloquent {
+class Photo extends \Eloquent {
 
   protected $table = 'photos';
 

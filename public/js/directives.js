@@ -17,31 +17,9 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var app = angular.module('ekkogourmet', ['ekkogourmetControllers', 'ekkogourmetFilters']);
+var iziDirectives = angular.module('iziDirectives', []);
 
-app.directive('autoSizeInput', function() {
-    return {
-      replace: true,
-      scope: {
-        value: '=inputValue'
-      },  
-      templateUrl: 'packages/wetcat/board/templates/directives/autoSizeInput.html',
-      link: function(scope, element, attrs) {
-        var elInput = element.find('input');
-        var elSpan = element.find('span');
-        elSpan.html(elInput.val());
-
-        scope.$watch('value', function(value) {
-          if(value) {
-            elSpan.html(elInput.val());
-            elInput.css('width', (elSpan[0].offsetWidth + 10) + 'px');
-          }   
-        }); 
-      }   
-    };  
-  });
-
-app.directive("contenteditable", function() {
+iziDirectives.directive("contenteditable", function() {
   return {
     restrict: "A",
     require: "ngModel",
@@ -85,5 +63,66 @@ app.directive("contenteditable", function() {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
       };
     }
+  };
+});
+
+iziDirectives.directive('autoSizeInput', function() {
+  return {
+    replace: true,
+    scope: {
+      value: '=inputValue'
+    },  
+    templateUrl: 'packages/wetcat/board/templates/directives/autoSizeInput.html',
+    link: function(scope, element, attrs) {
+      var elInput = element.find('input');
+      var elSpan = element.find('span');
+      elSpan.html(elInput.val());
+
+      scope.$watch('value', function(value) {
+        if(value) {
+          elSpan.html(elInput.val());
+          elInput.css('width', (elSpan[0].offsetWidth + 10) + 'px');
+        }   
+      }); 
+    }   
+  };  
+});
+
+
+
+iziDirectives.directive('typeahead', function($timeout) {
+  return {
+    restrict: 'AEC',
+    scope: {
+      items: '=',
+      prompt: '@',
+      title: '@',
+      subtitle: '@',
+      model: '=',
+      onSelect: '&'
+    },
+    link: function(scope, elem, attrs) {
+      scope.handleSelection = function(selectedItem) {
+        console.log("handleSelection");
+        console.log(selectedItem);
+        console.log('---');
+        scope.model = selectedItem;
+        scope.current = 0;
+        scope.selected = true;
+        $timeout(function() {
+          scope.onSelect();
+        }, 200);
+      };
+      scope.current = 0;
+      scope.selected = true; // hides the list initially
+      scope.isCurrent = function(index) {
+        return scope.current == index;
+      };
+      scope.setCurrent = function(index) {
+        console.log('setCurrent: ' + index);
+        scope.current = index;
+      };
+    },
+    templateUrl: 'packages/wetcat/board/templates/typeahead-template.html'
   };
 });

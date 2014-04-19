@@ -1,7 +1,5 @@
 <?php namespace Wetcat\Board\Models;
 
-use \Illuminate\Database\Eloquent\Model as Eloquent;
-
 /*
  * iziBoard
  * Copyright (C) 2014  Andreas Göransson
@@ -21,12 +19,18 @@ use \Illuminate\Database\Eloquent\Model as Eloquent;
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class News extends Eloquent {
+class News extends \Eloquent {
 
   protected $table = 'news';
 
   protected $softDelete = true;
 
   protected $fillable = array('title', 'body');    
+
+
+  public function categories()
+  {
+    return $this->morphToMany('Wetcat\Board\Models\Category', 'categoryable');
+  }
 
 }

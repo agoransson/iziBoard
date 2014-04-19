@@ -41,24 +41,8 @@
       <h4>{{ n.title }} <small><span class="glyphicon glyphicon-minus-sign" ng-click="deleteNews(n)"></span></small> <small><span class="glyphicon glyphicon-question-sign" ng-click="openNewsModal(n)"></span></small></h4>
       <p>{{ n.body }}</p>
       <p>{{ n.created_at | brDateFilter | date:"yyyy-MM-dd" }}</p>
+      <span ng-repeat="category in n.categories" class="label label-info">{{ category.title }}</span>
       <hr>
     </div>
   </div>
 </div>
-
-
-<script id="newsModalContent.html" type="text/ng-template">
-  <div class="modal-header">
-    <h3>Edit news item</h3>
-  </div>
-  <div class="modal-body">
-    <input class="form-control" type="text" placeholder="title" ng-model="newsitem.title">
-    <textarea class="form-control" rows="3" placeholder="body" ng-model="newsitem.body"></textarea>
-  </div>
-  <div class="modal-footer">
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary" ng-click="newsModalOk()">OK</button>
-      <button type="button" class="btn btn-warning" ng-click="newsModalCancel()">Cancel</button>
-    </div>
-  </div>
-</script>

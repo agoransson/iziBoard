@@ -1,0 +1,16 @@
+
+  <div class="modal-header">
+    <h3>Edit news item</h3>
+  </div>
+  <div class="modal-body" ng-controller="CategoryController">
+    <input class="form-control" type="text" placeholder="title" ng-model="newsitem.title">
+    <textarea class="form-control" rows="3" placeholder="body" ng-model="newsitem.body"></textarea>
+    <tagger ng-model="newsitem.tags" options="categories" placeholder="Select category" single/>
+  </div>
+
+  <div class="modal-footer">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" ng-click="newsModalOk()">OK</button>
+      <button type="button" class="btn btn-warning" ng-click="newsModalCancel()">Cancel</button>
+    </div>
+  </div>
