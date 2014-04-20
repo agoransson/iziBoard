@@ -44,4 +44,9 @@ class Page extends Eloquent {
   {
     return $this->morphMany('Wetcat\Board\Models\Marker', 'markerable');
   }
+
+  public function blogposts()
+  {
+    return $this->morphMany('Wetcat\Board\Models\Blogpost', 'blogpostable');
+  }
 }

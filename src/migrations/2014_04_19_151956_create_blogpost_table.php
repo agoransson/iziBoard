@@ -15,9 +15,10 @@ class CreateBlogpostTable extends Migration {
 		Schema::create('blogposts', function($table){
 
 			$table->increments('id');
-
 			$table->string('title');
-			$table->string('heading');
+
+			$table->integer('blogpostable_id');
+			$table->string('blogpostable_type');
 
 			$table->timestamps();
 			$table->softDeletes();

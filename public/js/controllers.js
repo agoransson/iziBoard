@@ -21,9 +21,9 @@ var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-m
 
 
 
-iziControllers.controller('PageController', function($scope, $http) {
+iziControllers.controller('PageController', function ($scope, $http) {
 
-  $http.get('pages').success(function(pages){
+  $http.get('pages').success(function (pages){
     $scope.pages = pages;
     $scope.selectedPage = $scope.pages[0];
   }); 
@@ -42,33 +42,33 @@ iziControllers.controller('PageController', function($scope, $http) {
     $scope.pageTypes.push('blog');
   }
 
-  $scope.newPage = function() {
+  $scope.newPage = function () {
     var page = {
       type: $scope.pageTypes[0],
       title: 'my title',
       heading: 'my heading',
       description: 'my description'
     };
-    $http.post('pages', page).success(function(data){
+    $http.post('pages', page).success(function (data){
       $scope.pages.push(data);
       $scope.selectedPage = data;
     });
   }
 
-  $scope.showPage = function(page) {
+  $scope.showPage = function (page) {
     $scope.selectedPage = page;
   }
 
-  $scope.savePage = function(page) {
+  $scope.savePage = function (page) {
     $http.put('pages', page);
   }
 
-  $scope.deletePage = function(page) {
+  $scope.deletePage = function (page) {
     /*var index = $scope.pages.indexOf(page);
     $scope.pages.splice(index,1);
     if( $scope.pages.length > 0 )
       $scope.selectedPage = $scope.pages[0];*/
-    $http.delete('pages/'+page.id).success(function(data){
+    $http.delete('pages/'+page.id).success(function (data){
       var index = $scope.pages.indexOf(page);
       $scope.pages.splice(index,1);
       if( $scope.pages.length > 0 )
@@ -76,27 +76,27 @@ iziControllers.controller('PageController', function($scope, $http) {
     });
   }
 
-  $scope.setPageType = function(type) {
+  $scope.setPageType = function (type) {
     $scope.selectedPage.type = type;
   }
 
   /* Product type */
-  $scope.newProduct = function() {
+  $scope.newProduct = function () {
     var page = {
       type: 'product',
       title: 'my product',
       heading: 'my product',
       description: 'my product description'
     };
-    $http.post('pages', page).success(function(data){
+    $http.post('pages', page).success(function (data){
       $scope.pages.push(data);
       $scope.selectedPage = data;
     });
   }
 
-  $scope.deleteProduct = function(page) {
+  $scope.deleteProduct = function (page) {
     if( $scope.selectedPage.type == 'product' ){
-      $http.delete('pages/'+page.id).success(function(data){
+      $http.delete('pages/'+page.id).success(function (data){
         var index = $scope.pages.indexOf(page);
         $scope.pages.splice(index,1);
         if( $scope.pages.length > 0 )
@@ -107,7 +107,7 @@ iziControllers.controller('PageController', function($scope, $http) {
     }
   }
 
-  $scope.toggleProducts = function() {
+  $scope.toggleProducts = function () {
     $scope.productsEnabled = !$scope.productsEnabled;
     if( $scope.productsEnabled ){
       $scope.pageTypes.push('product');
@@ -117,22 +117,22 @@ iziControllers.controller('PageController', function($scope, $http) {
   }
 
   /* Blogs type */
-  $scope.newBlog = function() {
+  $scope.newBlog = function () {
     var page = {
       type: 'blog',
       title: 'my blog',
       heading: 'my blog',
       description: 'my blog description'
     };
-    $http.post('pages', page).success(function(data){
+    $http.post('pages', page).success(function (data){
       $scope.pages.push(data);
       $scope.selectedPage = data;
     });
   }
 
-  $scope.deleteBlog = function(page) {
+  $scope.deleteBlog = function (page) {
     if( $scope.selectedPage.type == 'blog' ){
-      $http.delete('pages/'+page.id).success(function(data){
+      $http.delete('pages/'+page.id).success(function (data){
         var index = $scope.pages.indexOf(page);
         $scope.pages.splice(index,1);
         if( $scope.pages.length > 0 )
@@ -143,7 +143,7 @@ iziControllers.controller('PageController', function($scope, $http) {
     }
   }
 
-  $scope.toggleBlogs = function() {
+  $scope.toggleBlogs = function () {
     $scope.blogsEnabled = !$scope.blogsEnabled;
     if( $scope.blogsEnabled ){
       $scope.pageTypes.push('blog');
@@ -154,19 +154,19 @@ iziControllers.controller('PageController', function($scope, $http) {
 
 });
 
-iziControllers.controller('TextController', function($scope, $http) {
+iziControllers.controller('TextController', function ($scope, $http) {
 
   // This should be fixed for polymorhpism
-  $scope.newTextable = function(page, text) {
+  $scope.newTextable = function (page, text) {
     if( $scope.selectedPage.texts.length < 4 ){
       var txt = {id: page.id, description: text};
-      $http.post('textables', txt).success(function(data){
+      $http.post('textables', txt).success(function (data){
         $scope.selectedPage.texts.push(data);
       });  
     }
   }
 
-  $scope.deleteText = function(text) {
+  $scope.deleteText = function (text) {
     var index = $scope.selectedPage.texts.indexOf(text);
     $scope.selectedPage.texts.splice(index,1);
     $http.delete('textables/'+text.id);
@@ -178,7 +178,7 @@ iziControllers.controller('TextController', function($scope, $http) {
 
 
 
-iziControllers.controller('MapCtrl', function($scope, $http) {
+iziControllers.controller('MapCtrl', function ($scope, $http) {
 
   $scope.markers = $scope.selectedPage.markers;
 
@@ -231,7 +231,7 @@ iziControllers.controller('MapCtrl', function($scope, $http) {
                         latitude: e.latLng.lat(),
                         longitude: e.latLng.lng()
                       }
-                      $http.post('markers', marker).success(function(data){
+                      $http.post('markers', marker).success(function (data){
                         $scope.selectedPage.markers.push(data);
                       });
                   }
@@ -247,7 +247,7 @@ iziControllers.controller('MapCtrl', function($scope, $http) {
   });
 
   // Fix for google maps resize problem...      
-  window.setTimeout(function(){                                
+  window.setTimeout(function (){                                
     $scope.showMap = true;
   },100);
 });
@@ -255,16 +255,15 @@ iziControllers.controller('MapCtrl', function($scope, $http) {
 
 
 
-iziControllers.controller('MarkerController', function($scope, $http) {
+iziControllers.controller('MarkerController', function ($scope, $http) {
 
-  $scope.saveMarker = function(marker) {
-    console.log(marker);
-    $http.put('markers', marker).success(function(data){
+  $scope.saveMarker = function (marker) {
+    $http.put('markers', marker).success(function (data){
       console.log('sparad');
     });
   }
 
-  $scope.deleteMarker = function(marker) {
+  $scope.deleteMarker = function (marker) {
     var index = $scope.selectedPage.markers.indexOf(marker);
     $scope.selectedPage.markers.splice(index,1); 
     $http.delete('markers/'+marker.id);
@@ -274,15 +273,15 @@ iziControllers.controller('MarkerController', function($scope, $http) {
 
 
 
-iziControllers.controller('ImageController', function($scope, $upload) {  
-  $scope.onFileSelect = function($files, imageOwner, ownerType, imageContainer) {
+iziControllers.controller('ImageController', function ($scope, $upload) {  
+  $scope.onFileSelect = function ($files, imageOwner, ownerType, update) {
     //$files: an array of files selected, each file has name, size, and type.
     for (var i = 0; i < $files.length; i++) {
       var file = $files[i];
 
       $scope.upload = $upload.upload({
         url: 'imageable', //upload.php script, node.js route, or servlet url
-        method: 'POST',
+        method: (update ? 'PUT' : 'POST'),
         // headers: {'header-key': 'header-value'},
         // withCredentials: true,
         data: {id: imageOwner.id, type: ownerType},
@@ -290,10 +289,10 @@ iziControllers.controller('ImageController', function($scope, $upload) {
         /* set the file formData name ('Content-Desposition'). Default is 'file' */
         //fileFormDataName: myFile, //or a list of names for multiple files (html5).
         /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
-        //formDataAppender: function(formData, key, val){}
-      }).progress(function(evt) {
+        //formDataAppender: function (formData, key, val){}
+      }).progress(function (evt) {
         console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(data, status, headers, config) {
+      }).success(function (data, status, headers, config) {
         // file is uploaded successfully
         //$scope.selectedPage.images.push(data);
         if( typeof imageOwner.images != 'undefined' )
@@ -305,7 +304,7 @@ iziControllers.controller('ImageController', function($scope, $upload) {
       });
       //.error(...)
       //.then(success, error, progress); 
-      //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
+      //.xhr(function (xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
     }
     /* alternative way of uploading, send the file binary with the file's content-type.
        Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
@@ -317,17 +316,17 @@ iziControllers.controller('ImageController', function($scope, $upload) {
 
 
 
-iziControllers.controller('NewsController', function($scope, $http, $modal, $log) {
+iziControllers.controller('NewsController', function ($scope, $http, $modal, $log) {
 
   $scope.orderProp = 'created_at';
   $scope.quantity = 3;
   $scope.orderType = true; //false = ASC, true = DESC
 
-  $http.get('news').success(function(news){
+  $http.get('news').success(function (news){
     $scope.news = news;
   });
 
-  $scope.openNewsModal = function(news){
+  $scope.openNewsModal = function (news){
 
     var modalInstance = $modal.open({
       templateUrl: 'packages/wetcat/board/templates/newsModalContent.html',
@@ -358,7 +357,7 @@ iziControllers.controller('NewsController', function($scope, $http, $modal, $log
     });
   };
 
-  $scope.deleteNews = function(news) {
+  $scope.deleteNews = function (news) {
     var index = $scope.news.indexOf(news);
     $scope.news.splice(index,1); 
     $http.delete('news/'+news.id);
@@ -394,7 +393,7 @@ var NewsInstanceCtrl = function ($scope, $modalInstance, $http, item) {
       return d.toString();
   }
 
-  Date.prototype.toMysqlFormat = function() {
+  Date.prototype.toMysqlFormat = function () {
       return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
   };
 }
@@ -403,14 +402,77 @@ var NewsInstanceCtrl = function ($scope, $modalInstance, $http, item) {
 
 
 
-iziControllers.controller('FooterController', function($scope, $http){
+iziControllers.controller('FooterController', function ($scope, $http){
 
 });
 
 
-iziControllers.controller('CategoryController', function($scope, $http){
-  $http.get('categories').success(function(categories){
+
+iziControllers.controller('CategoryController', function ($scope, $http){
+  $http.get('categories').success(function (categories){
     $scope.categories = categories;
   });
   $scope.tags = [];
+});
+
+
+
+iziControllers.controller('BlogController', function ($scope, $http){
+
+  $scope.selectedPage.currentBlogpost = $scope.selectedPage.blogposts[0];
+
+  $scope.newBlogpost = function () {
+    var blogpost = {
+      id: $scope.selectedPage.id,
+      title: 'my post title'
+    };
+    $http.post('posts', blogpost).success(function (data){
+      $scope.selectedPage.blogposts.push(data);
+    });
+  }
+
+  $scope.showBlogpost = function (post) {
+    $scope.selectedPage.currentBlogpost = post;
+  }
+
+  $scope.getBlogitems = function (post) {
+    var items = [];
+
+    if( typeof post != 'undefined' ){
+      items = items.concat(post.images);
+      items = items.concat(post.texts);
+    }
+
+    return items;
+  }
+
+  $scope.addBlogImage = function (post) {
+    var image = {
+      id: post.id,
+      type: 'Blogpost',
+      originalName: '',
+      name: '',
+      ext: '',
+      filename: '',
+      thumbnail: ''
+    };
+
+    $http.post('imageable', image).success(function (data) {
+      post.images.push(image);
+    });
+  }
+
+  $scope.addBlogText = function (post) {
+    console.log(post);
+    var text = {
+      id: post.id,
+      type: 'Blogpost',
+      description: 'My text'
+    };
+
+    $http.post('textables', text).success(function (data) {
+      post.texts.push(data);
+    });
+  }
+
 });

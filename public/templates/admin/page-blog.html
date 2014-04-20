@@ -27,19 +27,41 @@
   </ul>
 </li>
 
-<div class="row">
-  <div class="col-xs-12">
-    <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
-    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="saveBlog(page)"></span></small></h1>
+<div class="row" ng-controller="BlogController">
+
+  <div class="col-xs-8 visible-md visible-lg blog-container">
+
+    <div ng-model="page.currentBlogpost" class="blogpost-item">
+      <h4>{{ page.currentBlogpost.title }} <small><span class="glyphicon glyphicon-picture fix-sign" ng-click="addBlogImage(page.currentBlogpost)" tooltip="Add image" tooltip-placement="bottom"></span> <span class="glyphicon glyphicon-comment fix-sign" ng-click="addBlogText(page.currentBlogpost)" tooltip="Add text" tooltip-placement="bottom"></span> | <span class="glyphicon glyphicon-minus-sign" ng-click="deleteBlogpost(page.currentBlogpost)" tooltip="Delete blogpost" tooltip-placement="bottom"></span></small></h4>
+      <p>{{ page.currentBlogpost.created_at }}</p>
+
+      <div ng-repeat="blogitem in getBlogitems(page.currentBlogpost)">
+
+        <div ng-if="blogitem.textable_id">
+          <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
+          <textarea msd-elastic class="vert edit-menu" ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="blogitem.description" btf-markdown="blogitem.description"></textarea>
+        </div>
+
+        <div ng-if="blogitem.imageable_id" ng-controller="ImageController">
+          <div ng-if="blogitem.src" ng-file-drop="onFileSelect($files, blogitem, '', true)" ng-file-drag-over-class="optional-css-class">
+            <img class="img-responsive" ng-src="uploads/{{ blogitem.src }}" />
+          </div>
+
+          <div ng-if="!blogitem.src" ng-file-drop="onFileSelect($files, blogitem, '', true)" ng-file-drag-over-class="optional-css-class">
+            <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="Drop image here"/>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
   </div>
 
-  <div class="col-xs-12 visible-md visible-lg news-container">
-    <div ng-repeat="n in news" class="news-item">
-      <h4>{{ n.title }} <small><span class="glyphicon glyphicon-minus-sign" ng-click="deleteNews(n)"></span></small> <small><span class="glyphicon glyphicon-question-sign" ng-click="openNewsModal(n)"></span></small></h4>
-      <p>{{ n.body }}</p>
-      <p>{{ n.created_at | brDateFilter | date:"yyyy-MM-dd" }}</p>
-      <span ng-repeat="category in n.categories" class="label">{{ category.title }}</span>
-      <hr>
-    </div>
+  <div class="col-xs-4 visible-md visible-lg">
+    <h2>Arkiv <small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newBlogpost()"></span></small></h2>
+    <ul ng-repeat="post in page.blogposts">
+      <li><a href ng-click="showBlogpost(post)">{{ post.title }}</a></li>
+    </ul>
   </div>
 </div>

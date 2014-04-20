@@ -36,6 +36,7 @@ use Wetcat\Board\Models\Page;
 use Wetcat\Board\Models\Photo;
 use Wetcat\Board\Models\Text;
 use Wetcat\Board\Models\Category;
+use Wetcat\Board\Models\Blogpost;
 
 
 
@@ -52,7 +53,7 @@ Route::get('/', function()
 /* ============ PAGE ============= */
 
 Route::get('pages', function(){
-  return Page::with(array('texts', 'images', 'markers'))->get();
+  return Page::with(array('texts', 'images', 'markers', 'blogposts', 'blogposts.images', 'blogposts.texts'))->get();
 });
 
 Route::post('pages', function(){
@@ -82,9 +83,15 @@ Route::delete('pages/{id}', function($id){
 /* ============ TEXT (able) ============= */
 
 Route::post('textables', function(){
-  $page = Page::find(Input::get('id'));
-  $text = Text::create(Input::all());
-  $page->texts()->save($text);
+  $text = Text::create(Input::only('description'));
+
+  if( Input::has('id') && Input::get('id') != 'undefined' ){
+    $containerId = Input::get('id');
+    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+    $container = $containerType::find($containerId);
+    $container->texts()->save($text);
+  }
+
   return $text;
 });
 
@@ -98,6 +105,57 @@ Route::delete('textables/{id}', function($id){
 /* ============ IMAGE (able) ============= */
 
 Route::post('imageable', function(){
+  $path = public_path();
+
+  if( Input::has('file') ){
+    $file = Input::file('file');
+
+    $originalName = $file->getClientOriginalName();
+
+    $date = new DateTime();
+    $name = $date->getTimestamp();
+    $ext = $file->getClientOriginalExtension();
+
+    $filename = $name . '.' . $ext;
+
+    $image = \Image::make(Input::file('file')->getRealPath());
+
+    File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
+
+    $image->save($path.'/uploads/'.$name.'.'.$ext);
+
+    $image->resize(null, 200, true)->crop(100, 100);
+
+    $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
+
+    $thumbnail = $name.'_thumb.'.$ext;
+
+    $data = array(
+      'originalname' => $originalName,
+      'name' => $name,
+      'ext' => $ext,
+      'filename' => $filename,
+      'thumbnail' => $thumbnail
+    );
+    return "OK";
+    $photo = Photo::create($data);
+  }else{
+    return "NOK";
+    $photo = Photo::create(Input::all());
+  }
+
+  
+  if( Input::has('id') && Input::get('id') != 'undefined' ){
+    $containerId = Input::get('id');
+    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+    $container = $containerType::find($containerId);
+    $container->images()->save($photo);
+  }
+
+  return $photo;
+});
+
+Route::put('imageable', function () {
   $path = public_path();
 
   $file = Input::file('file');
@@ -122,7 +180,13 @@ Route::post('imageable', function(){
 
   $thumbnail = $name.'_thumb.'.$ext;
 
-  $photo = Photo::create(array('originalname' => $originalName, 'name' => $name, 'ext' => $ext, 'filename' => $filename, 'thumbnail' => $thumbnail));
+  $data = array(
+    'originalname' => $originalName,
+    'name' => $name,
+    'ext' => $ext,
+    'filename' => $filename,
+    'thumbnail' => $thumbnail);
+  $photo = Photo::find(Input::get('id'))->update($data);
 
   
   if( Input::has('id') && Input::get('id') != 'undefined' ){
@@ -209,4 +273,21 @@ Route::get('categories', function(){
 Route::post('categories', function(){
   $category = Category::create(Input::all());
   return $category;
+});
+
+
+
+
+/* ============ CATEGORIES ============= */
+
+Route::get('posts/{id}', function($id){
+  $page = Page::find($id);
+  return $page->blogposts();
+});
+
+Route::post('posts', function(){
+  $page = Page::find(Input::get('id'));
+  $blogpost = Blogpost::create(Input::all());
+  $page->blogposts()->save($blogpost);
+  return $blogpost;
 });

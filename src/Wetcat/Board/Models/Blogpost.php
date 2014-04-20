@@ -27,8 +27,13 @@ class Blogpost extends Eloquent {
 
   protected $softDelete = true;
 
-  protected $fillable = array('title', 'heading');    
+  protected $fillable = array('title');    
 
+
+  public function blogpostable()
+  {
+    return $this->morphTo();
+  }
 
   public function texts()
   {
