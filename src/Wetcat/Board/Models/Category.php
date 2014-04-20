@@ -28,7 +28,7 @@ class Category extends \Eloquent {
 
   public function news()
   {
-    return $this->morphedByMany('News', 'categoryable');
+    return $this->morphedByMany('Wetcat\Board\Models\News', 'categoryable');
   }
 
 }

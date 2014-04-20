@@ -19,28 +19,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class News extends \Eloquent {
+class Tag extends \Eloquent {
 
-  protected $table = 'news';
+  protected $table = 'tags';
 
-  protected $softDelete = true;
-
-  protected $fillable = array('title', 'body');    
+  protected $fillable = array('title');    
 
 
-  public function categories()
+  public function news()
   {
-    return $this->morphToMany('Wetcat\Board\Models\Category', 'categoryable');
-  }
-
-  public function tags()
-  {
-    return $this->morphToMany('Wetcat\Board\Models\Tag', 'taggable');
-  }
-
-  public function images()
-  {
-    return $this->morphMany('Wetcat\Board\Models\Photo', 'imageable');
+    return $this->morphedByMany('Wetcat\Board\Models\News', 'taggable');
   }
 
 }

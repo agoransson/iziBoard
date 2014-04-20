@@ -54,9 +54,9 @@
     {{ HTML::script('packages/wetcat/board/js/underscore-min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-google-maps.min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-sanitize.min.js') }}
-
+    {{ HTML::script('packages/wetcat/board/js/elastic.js') }}
+    {{ HTML::script('packages/wetcat/board/js/showdown.js') }}
     
-
     {{ HTML::script('packages/wetcat/board/js/controllers.js') }}
     {{ HTML::script('packages/wetcat/board/js/filters.js') }}
     {{ HTML::script('packages/wetcat/board/js/directives.js') }}

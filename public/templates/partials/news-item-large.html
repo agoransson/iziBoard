@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h4>{{ n.title }} <small><span class="glyphicon glyphicon-minus-sign" ng-click="deleteNews(n)"></span></small> <small><span class="glyphicon glyphicon-question-sign" ng-click="openNewsModal(n)"></span></small></h4>
+  </div>
+
+  <!-- if image -->
+  <div class="col-xs-4" ng-if="n.images.length > 0">
+    <img class="img-responsive" ng-src="uploads/{{ n.images[n.images.length-1].filename }}" />
+  </div>
+  <div ng-class="{'col-xs-8': (n.images.length > 0), 'col-xs-12': !(n.images.length > 0)}">
+    <p>{{ n.body | limitTo:100 }}...</p>
+    <p>{{ n.created_at | brDateFilter | date:"yyyy-MM-dd" }}</p>
+  </div>
+  <!-- else -->
+
+  <!-- end if -->
+  <div class="col-xs-12">
+    <span ng-repeat="category in n.categories | limitTo: 1" class="label label-info">{{ category.title }}</span>
+  </div>
+  <hr>
+</div>

@@ -3,9 +3,31 @@
     <h3>Edit news item</h3>
   </div>
   <div class="modal-body" ng-controller="CategoryController">
-    <input class="form-control" type="text" placeholder="title" ng-model="newsitem.title">
-    <textarea class="form-control" rows="3" placeholder="body" ng-model="newsitem.body"></textarea>
-    <tagger ng-model="newsitem.tags" options="categories" placeholder="Select category" single/>
+    <div class="row">
+
+      <div class="col-xs-12">
+        <input class="form-control" type="text" placeholder="title" ng-model="newsitem.title">
+      </div>
+      
+      <div class="col-xs-4" ng-controller="ImageController">
+        <div ng-if="false" ng-file-drop="onFileSelect($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
+          <img class="img-responsive" ng-src="uploads/{{ newsitem.images[newsitem.images.length-1].filename }}" />
+        </div>
+
+        <div ng-if="true" ng-file-drop="onFileSelect($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
+          <img class="img-rounded img-responsive" ph-img="400x200" ph-txt="Drop image here"/>
+        </div>
+      </div>
+
+      <div class="col-xs-8">
+        <textarea class="form-control" rows="3" placeholder="body" ng-model="newsitem.body"></textarea>
+      </div>
+      
+      <div class="col-xs-12">
+        <tagger ng-model="newsitem.tags" options="categories" placeholder="Select category" single>
+      </div>
+
+    </div>
   </div>
 
   <div class="modal-footer">

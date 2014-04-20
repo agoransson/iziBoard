@@ -17,15 +17,15 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var iziFilters = angular.module('iziFilters', []);
+var iziFilters = angular.module('iziFilters', ['ngSanitize']);
 
-iziFilters.filter('brDateFilter', function() {
+iziFilters.filter('brDateFilter', function () {
   return function(str) {
     return str.substr(0,10);
   };
 });
 
-iziFilters.filter('firstLineHeading', function() {
+iziFilters.filter('firstLineHeading', function () {
   return function(str) {
     var index = str.indexOf('<br>');
     if( index != -1 ){
@@ -38,15 +38,52 @@ iziFilters.filter('firstLineHeading', function() {
   };
 });
 
-iziFilters.filter('bold', function() {
+iziFilters.filter('bold', function () {
   return function(str) {
     return '<b>' + str + '</b>';
   };
 });
 
-iziFilters.filter('firstLine', function() {
+iziFilters.filter('firstLine', function () {
   return function(str) {
     var index = str.indexOf('<br>');
     return '<b>'+str.substr(0, index)+'</b>';
   };
+});
+
+
+iziFilters.filter('NavBarFilter', function () {
+  return function(items) {
+    var result = {};
+
+    console.log(items);
+
+    return result;
+  };
+});
+
+iziFilters.filter("nl2br", function ($sce) {
+ return function(data) {
+   if (!data) return data;
+   return data.replace(/\n\r?/g, $sce.trustAsHtml('<br />'));
+ };
+});
+
+iziFilters.filter('paragraphs', function ($sce) {
+  return function (str) {
+    return str.split('\n');
+  };
+});
+
+
+iziFilters.filter("bb", function ($sce) {
+ return function(data) {
+   if (!data) return data;
+   var out = data;
+
+   out = out.replace(/\[?/g, $sce.trustAsHtml('<'));
+   out = out.replace(/\]?/g, $sce.trustAsHtml('>'));
+
+   return out;
+ };
 });

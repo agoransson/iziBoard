@@ -116,9 +116,21 @@ Route::post('imageable', function(){
 
   $image->save($path.'/uploads/'.$name.'.'.$ext);
 
-  $page = Page::find(Input::get('id'));
-  $photo = Photo::create(array('originalname' => $originalName, 'name' => $name, 'ext' => $ext, 'filename' => $filename ));
-  $page->images()->save($photo);
+  $image->resize(null, 200, true)->crop(100, 100);
+
+  $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
+
+  $thumbnail = $name.'_thumb.'.$ext;
+
+  $photo = Photo::create(array('originalname' => $originalName, 'name' => $name, 'ext' => $ext, 'filename' => $filename, 'thumbnail' => $thumbnail));
+
+  
+  if( Input::has('id') && Input::get('id') != 'undefined' ){
+    $containerId = Input::get('id');
+    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+    $container = $containerType::find($containerId);
+    $container->images()->save($photo);
+  }
 
   return $photo;
 });
@@ -129,7 +141,7 @@ Route::post('imageable', function(){
 /* ============ NEWS ============= */
 
 Route::get('news', function(){
-  return News::with('categories')->orderBy('created_at', 'DESC')->get();
+  return News::with('categories', 'images')->orderBy('created_at', 'DESC')->get();
 });
 
 Route::post('news', function(){
@@ -137,11 +149,16 @@ Route::post('news', function(){
   $data = Input::only('title', 'body');
   $news = News::create($data);
 
-  $category = Category::find(Input::get('tags')['id']);
-  $news->categories()->save($category);
-  $news->categories();
+  if( Input::has('images') && count(Input::get('images')) > 0 ){
+    $photo = Photo::find(Input::get('images')[0]['id']);
+    $news->images()->save($photo);    
+  }
 
-  return $category;
+  $cat = Input::get('tags');
+  $category = Category::find($cat['id']);
+  $news->categories()->attach($category);
+
+  return News::with(array('images', 'categories'))->where('id', $news->id)->get()->first();
 });
 
 Route::delete('news/{id}', function($id){

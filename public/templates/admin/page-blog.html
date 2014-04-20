@@ -30,12 +30,16 @@
 <div class="row">
   <div class="col-xs-12">
     <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
-    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="openNewsModal()"></span></small></h1>
+    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="saveBlog(page)"></span></small></h1>
   </div>
 
   <div class="col-xs-12 visible-md visible-lg news-container">
-    <div ng-repeat="n in news | orderBy:orderProp:orderType" class="news-item" ng-include="'packages/wetcat/board/templates/partials/news-item-large.html'">
-      <!-- Dynamic section template used -->
+    <div ng-repeat="n in news" class="news-item">
+      <h4>{{ n.title }} <small><span class="glyphicon glyphicon-minus-sign" ng-click="deleteNews(n)"></span></small> <small><span class="glyphicon glyphicon-question-sign" ng-click="openNewsModal(n)"></span></small></h4>
+      <p>{{ n.body }}</p>
+      <p>{{ n.created_at | brDateFilter | date:"yyyy-MM-dd" }}</p>
+      <span ng-repeat="category in n.categories" class="label">{{ category.title }}</span>
+      <hr>
     </div>
   </div>
 </div>

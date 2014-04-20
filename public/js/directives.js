@@ -17,7 +17,7 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var iziDirectives = angular.module('iziDirectives', []);
+var iziDirectives = angular.module('iziDirectives', ['ngSanitize']);
 
 iziDirectives.directive("contenteditable", function() {
   return {
@@ -124,5 +124,32 @@ iziDirectives.directive('typeahead', function($timeout) {
       };
     },
     templateUrl: 'packages/wetcat/board/templates/typeahead-template.html'
+  };
+});
+
+
+/*
+ * angular-markdown-directive v0.2.0
+ * (c) 2013 Brian Ford http://briantford.com
+ * License: MIT
+ */
+
+'use strict';
+
+iziDirectives.directive('btfMarkdown', function ($sanitize) {
+  var converter = new Showdown.converter();
+  return {
+    restrict: 'AE',
+    link: function (scope, element, attrs) {
+      if (attrs.btfMarkdown) {
+        scope.$watch(attrs.btfMarkdown, function (newVal) {
+          var html = newVal ? $sanitize(converter.makeHtml(newVal)) : '';
+          element.html(html);
+        });
+      } else {
+        var html = $sanitize(converter.makeHtml(element.text()));
+        element.html(html);
+      }
+    }
   };
 });

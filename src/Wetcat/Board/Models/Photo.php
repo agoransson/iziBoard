@@ -25,7 +25,7 @@ class Photo extends \Eloquent {
 
   protected $softDelete = true;
 
-  protected $fillable = array('originalname', 'name', 'ext', 'filename');    
+  protected $fillable = array('originalname', 'name', 'ext', 'filename', 'thumbnail');    
 
 
   public function imageable()

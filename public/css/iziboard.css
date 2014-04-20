@@ -39,7 +39,7 @@ body {
 
 
 /* Text-like inputs */
-.admin-input {
+input {
   background-color:transparent;
   border: 0px solid;
   margin: 0;
@@ -47,18 +47,46 @@ body {
   resize: horizontal;
   width: auto;
 }
-.admin-input:focus, .admin-input:focus{
+input:focus{
     outline: 0;
 }
-.admin-input:focus {
+input:focus {
     outline: 0;
 }
-.admin-input:active {
+input:active {
   width: auto;   
 }
-.admin-input:focus {
+input:focus {
   min-width: 200px;
 }
+
+textarea {
+  background-color:transparent;
+  border: 0px solid;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  resize: both; 
+}/* none|horizontal|vertical|both */
+textarea.vert { 
+  resize: vertical; 
+}
+textarea.noResize { 
+  resize: none; 
+}
+textarea:focus{
+  outline: 0;
+}
+textarea:focus {
+  outline: 0;
+}
+textarea:active {
+  width: 100%;   
+}
+textarea:focus {
+  min-width: 200px;
+}
+
 
 /* General styles */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
@@ -72,12 +100,18 @@ body {
 .fix-heading {
   display: inline;
 }
-.fix-heading > .glyphicon {
+
+[class$="-sign"],
+[class*="-sign "] {
   cursor: pointer;
 }
-.fix-heading .glyphicon:hover {
+
+[class$="-sign"]:hover,
+[class*="-sign "]:hover {
+  cursor: pointer;
   color: #ccc;
 }
+
 
 /* Toolbox popup */
 .edit-menu {
@@ -96,19 +130,9 @@ body {
   display: inline-block;
   z-index: 1000;
 }
-.edit-toolbox > span:hover {
-  cursor: pointer;
-  color: #ccc;
-}
 
 /* News styles */
 .news-container {
-}
-.news-container .glyphicon {
-  cursor: pointer;
-}
-.news-container .glyphicon:hover {
-  color: #ccc;
 }
 .news-item {
 }
@@ -123,15 +147,11 @@ body {
 .marker-item > h3 {
   display: inline;
 }
-.marker-item > h3 .glyphicon {
-  cursor: pointer;
-}
-.marker-item > h3 .glyphicon:hover {
-  color: #ccc;
-}
 
-/* Typeahead */
-.active {
-  background-color: #C44741;
-  color: #f2f2f2;
+
+/* Drag and drop hover effect */
+.dropactive {
+  border-color: #66AFE9;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0,075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+  outline: 0 none;
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryablesTable extends Migration {
+class CreateTagsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,14 +12,13 @@ class CreateCategoryablesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('categoryables', function($table){
+		Schema::create('tags', function($table){
 
-			$table->integer('category_id');
-
-			$table->integer('categoryable_id');
-			$table->string('categoryable_type');
+			$table->increments('id');
+			$table->string('title');
 
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 
@@ -30,7 +29,7 @@ class CreateCategoryablesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('categoryables');
+		Schema::dropIfExists('tags');
 	}
 
 }

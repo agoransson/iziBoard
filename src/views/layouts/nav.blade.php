@@ -31,20 +31,25 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav" ng-repeat="page in pages | filter: {type: '!product'}">
+      <ul class="nav navbar-nav" ng-repeat="page in pages | filter: {type: '!product'} | filter: {type: '!blog'}">
 
         <li><a href ng-click="showPage(page)">@{{ page.title }}</a></li>
         
       </ul>
       
-      <ul class="nav navbar-nav navbar-left" ng-if="(productsEnabled && (pages | filter: {type: 'product'}).length > 0)">
-        <li class="dropdown">
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown" ng-if="(productsEnabled && (pages | filter: {type: 'product'}).length > 0)">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href ng-click="showPage(page)" ng-repeat="page in pages | filter: {type: 'product'}">@{{ page.title }}</a></li>
           </ul>
         </li>
+
+        <li ng-if="(blogsEnabled && (pages | filter: {type: 'blog'}).length > 0)" ng-repeat="page in pages | filter: {type: 'blog'}"><a href ng-click="showPage(page)">@{{ page.title }}</a></li>
+
       </ul>
+
+
 
       {{-- TODO: should hide for normal users --}}
       @if( true )
@@ -56,12 +61,18 @@
             <li><a href ng-click="newPage()"><span class="glyphicon glyphicon-plus"></span> Add page</a></li>
             <li><a href ng-click="deletePage(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove page</a></li>
             <li><a href ng-click="savePage(selectedPage)"><span class="glyphicon glyphicon-check"></span> Save page</a></li>
-            <li class="divider"></li>
             
             {{-- Products --}}
+            <li class="divider"></li>
             <li><a href ng-click="toggleProducts()"><span ng-class="{'glyphicon-check': productsEnabled, 'glyphicon-unchecked': !productsEnabled}" class="glyphicon"></span> @{{ productsEnabled ? 'Disable' : 'Enable' }} products</a></li>
             <li ng-if="productsEnabled"><a href ng-click="newProduct()"><span class="glyphicon glyphicon-plus"></span> Add product</a></li>
             <li ng-if="productsEnabled"><a href ng-click="deleteProduct(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove product</a></li>
+
+            {{-- Blogs --}}
+            <li class="divider"></li>
+            <li><a href ng-click="toggleBlogs()"><span ng-class="{'glyphicon-check': blogsEnabled, 'glyphicon-unchecked': !blogsEnabled}" class="glyphicon"></span> @{{ blogsEnabled ? 'Disable' : 'Enable' }} blogs</a></li>
+            <li ng-if="blogsEnabled"><a href ng-click="newBlog()"><span class="glyphicon glyphicon-plus"></span> Add blog</a></li>
+            <li ng-if="blogsEnabled"><a href ng-click="deleteBlog(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove blog</a></li>
           </ul>
         </li>
       </ul>

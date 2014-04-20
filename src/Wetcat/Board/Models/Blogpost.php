@@ -1,5 +1,7 @@
 <?php namespace Wetcat\Board\Models;
 
+use \Illuminate\Database\Eloquent\Model as Eloquent;
+
 /*
  * iziBoard
  * Copyright (C) 2014  Andreas Göransson
@@ -19,14 +21,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class News extends \Eloquent {
+class Blogpost extends Eloquent {
 
-  protected $table = 'news';
+  protected $table = 'blogposts';
 
   protected $softDelete = true;
 
-  protected $fillable = array('title', 'body');    
+  protected $fillable = array('title', 'heading');    
 
+
+  public function texts()
+  {
+    return $this->morphMany('Wetcat\Board\Models\Text', 'textable');
+  }
+
+  public function images()
+  {
+    return $this->morphMany('Wetcat\Board\Models\Photo', 'imageable');
+  }
 
   public function categories()
   {
@@ -37,10 +49,4 @@ class News extends \Eloquent {
   {
     return $this->morphToMany('Wetcat\Board\Models\Tag', 'taggable');
   }
-
-  public function images()
-  {
-    return $this->morphMany('Wetcat\Board\Models\Photo', 'imageable');
-  }
-
 }

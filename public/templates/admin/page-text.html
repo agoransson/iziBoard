@@ -27,22 +27,17 @@
   </ul>
 </li>
 
-<div class="row">
+<div class="row" ng-controller="TextController">
   <div class="col-xs-12">
-    <h1 class="edit-menu" contenteditable ng-model="page.heading" strip-br="true" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">{{ page.heading }}</h1>
-    <div class="edit-toolbox" ng-show="showHeadingTools" ng-mouseenter="showHeadingTools = true" ng-mouseleave="showHeadingTools = false">
-      <span class="glyphicon glyphicon-ok" ng-click="savePage(page)"></span>
-    </div>
+    <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
+    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Lipsum...')"></span></small></h1>
   </div>
-  <div ng-controller="TextController">
+
+  <div>
     <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
       <p contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true">{{ text.description }}</p>
       <p ng-if="(+text.description.length <= 0)" contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true" ph-txt="{{ numCombined }}"></p>
-      <div class="edit-toolbox" ng-show="showTextTools" ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false">
-        <span class="glyphicon glyphicon-remove-sign" ng-click="deleteText(text)"></span><br/>
-        <span class="glyphicon glyphicon-ok" ng-click="savePage(page)"></span><br/>
-        <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Lipsum...')"></span>
-      </div>
+      <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
     </div>
     <div ng-if="(+page.texts.length <= 0)">
       <div class="col-xs-12">

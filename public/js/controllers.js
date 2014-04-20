@@ -36,6 +36,12 @@ iziControllers.controller('PageController', function($scope, $http) {
     $scope.pageTypes.push('product');
   }
 
+  // TODO: Do a GET on settings for blogs (if it's enabled)
+  $scope.blogsEnabled = true;
+  if( $scope.blogsEnabled ){
+    $scope.pageTypes.push('blog');
+  }
+
   $scope.newPage = function() {
     var page = {
       type: $scope.pageTypes[0],
@@ -74,6 +80,7 @@ iziControllers.controller('PageController', function($scope, $http) {
     $scope.selectedPage.type = type;
   }
 
+  /* Product type */
   $scope.newProduct = function() {
     var page = {
       type: 'product',
@@ -106,6 +113,42 @@ iziControllers.controller('PageController', function($scope, $http) {
       $scope.pageTypes.push('product');
     } else {
       $scope.pageTypes.pop('product');
+    }
+  }
+
+  /* Blogs type */
+  $scope.newBlog = function() {
+    var page = {
+      type: 'blog',
+      title: 'my blog',
+      heading: 'my blog',
+      description: 'my blog description'
+    };
+    $http.post('pages', page).success(function(data){
+      $scope.pages.push(data);
+      $scope.selectedPage = data;
+    });
+  }
+
+  $scope.deleteBlog = function(page) {
+    if( $scope.selectedPage.type == 'blog' ){
+      $http.delete('pages/'+page.id).success(function(data){
+        var index = $scope.pages.indexOf(page);
+        $scope.pages.splice(index,1);
+        if( $scope.pages.length > 0 )
+          $scope.selectedPage = $scope.pages[index-1];
+      });  
+    } else {
+      // TODO: Make dialog feedback saying that the page is not a blog
+    }
+  }
+
+  $scope.toggleBlogs = function() {
+    $scope.blogsEnabled = !$scope.blogsEnabled;
+    if( $scope.blogsEnabled ){
+      $scope.pageTypes.push('blog');
+    } else {
+      $scope.pageTypes.pop('blog');
     }
   }
 
@@ -232,7 +275,7 @@ iziControllers.controller('MarkerController', function($scope, $http) {
 
 
 iziControllers.controller('ImageController', function($scope, $upload) {  
-  $scope.onFileSelect = function($files, page) {
+  $scope.onFileSelect = function($files, imageOwner, ownerType, imageContainer) {
     //$files: an array of files selected, each file has name, size, and type.
     for (var i = 0; i < $files.length; i++) {
       var file = $files[i];
@@ -242,7 +285,7 @@ iziControllers.controller('ImageController', function($scope, $upload) {
         method: 'POST',
         // headers: {'header-key': 'header-value'},
         // withCredentials: true,
-        data: {id: page.id},
+        data: {id: imageOwner.id, type: ownerType},
         file: file, // or list of files: $files for html5 only
         /* set the file formData name ('Content-Desposition'). Default is 'file' */
         //fileFormDataName: myFile, //or a list of names for multiple files (html5).
@@ -252,7 +295,13 @@ iziControllers.controller('ImageController', function($scope, $upload) {
         console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {
         // file is uploaded successfully
-        $scope.selectedPage.images.push(data);
+        //$scope.selectedPage.images.push(data);
+        if( typeof imageOwner.images != 'undefined' )
+          imageOwner.images.push(data);
+        else{
+          imageOwner.images = [];
+          imageOwner.images.push(data);
+        }
       });
       //.error(...)
       //.then(success, error, progress); 
