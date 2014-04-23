@@ -13,6 +13,8 @@
 
 * Publish the package assets using artisan ```php artisan asset:publish wetcat/board```
 
+* This package uses it's own routes, you must remove the root ('/') route in laravel.
+
 ## This package uses Intervention/Image 
 
 * To publish the Intervention assets (not required) run ```php artisan asset:publish intervention/image```
@@ -25,4 +27,4 @@ This package comes with some configuration options, to change them for your inst
 
 ### Change core style
 
-Change the 
+TODO
