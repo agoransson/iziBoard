@@ -42,11 +42,13 @@ Note that if you're using a locally stored bootstrap stylesheet you will likely 
 
 ### Frameworks used for iziBoard
 
-* [AngularJS - Superheroic JavaScript MVW Framework](https://angularjs.org/)
-* [Laravel - PHP Framework for web artisans](http://laravel.com/)
+* [AngularJS](https://angularjs.org/)
+* [Laravel](http://laravel.com/)
+* [Bootstrap](http://getbootstrap.com/)
 
 #### Angular directives and libraries used to produce iziBoard
 
+* [UI Bootstrap](http://angular-ui.github.io/bootstrap/)
 * [AngularJS directives for Google Maps](https://github.com/nlaplante/angular-google-maps.git)
 * [angular-file-upload](https://github.com/danialfarid/angular-file-upload)
 * [angular-tagger](https://github.com/monterail/angular-tagger)
@@ -55,4 +57,5 @@ Note that if you're using a locally stored bootstrap stylesheet you will likely 
 * [showdown](http://www.attacklab.net/)
 * [angular-hotkeys](https://chieffancypants.github.io/angular-hotkeys)
 * [underscore](http://underscorejs.org)
+* [elastic](https://github.com/monospaced/angular-elastic/blob/master/elastic.js)
 
