@@ -49,10 +49,8 @@
 
       </ul>
 
-
-
-      {{-- TODO: should hide for normal users --}}
-      @if( true )
+      {{-- Render admin --}}
+      @if( \Sentry::check() && \Sentry::getUser()->hasAccess('admin') )
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
@@ -77,6 +75,8 @@
         </li>
       </ul>
       @endif
+
+
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

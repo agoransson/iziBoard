@@ -56,24 +56,27 @@ Route::get('pages', function(){
   return Page::with(array('texts', 'images', 'markers', 'blogposts', 'blogposts.images', 'blogposts.texts'))->get();
 });
 
-Route::post('pages', function(){
-  $page = Page::create(Input::all());
-  return Page::with(array('texts', 'images', 'markers'))->where('id', $page->id)->first();
-});
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('pages', function(){
+    $page = Page::create(Input::all());
+    return Page::with(array('texts', 'images', 'markers'))->where('id', $page->id)->first();
+  });
 
-Route::put('pages', function(){
-  $page = Page::find(Input::get('id'))->update(Input::all());
-  $texts = Input::get('texts');
+  Route::put('pages', function(){
+    $page = Page::find(Input::get('id'))->update(Input::all());
+    $texts = Input::get('texts');
 
-  foreach($texts as $text){
-    $txt = Text::find($text['id'])->update($text);
-  }
-});
+    foreach($texts as $text){
+      $txt = Text::find($text['id'])->update($text);
+    }
+  });
 
-Route::delete('pages/{id}', function($id){
-  $page = Page::find($id);
-  $page->delete();
-  return $page;
+  Route::delete('pages/{id}', function($id){
+    $page = Page::find($id);
+    $page->delete();
+    return $page;
+  });
 });
 
 
@@ -82,26 +85,29 @@ Route::delete('pages/{id}', function($id){
 
 /* ============ TEXT (able) ============= */
 
-Route::post('textables', function(){
-  $text = Text::create(Input::only('description'));
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('textables', function(){
+    $text = Text::create(Input::only('description'));
 
-  if( Input::has('id') && Input::get('id') != 'undefined' ){
-    $containerId = Input::get('id');
-    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
-    $container = $containerType::find($containerId);
-    $container->texts()->save($text);
-  }
+    if( Input::has('id') && Input::get('id') != 'undefined' ){
+      $containerId = Input::get('id');
+      $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+      $container = $containerType::find($containerId);
+      $container->texts()->save($text);
+    }
 
-  return $text;
-});
+    return $text;
+  });
 
-Route::delete('textables/{id}', function($id){
-  $text = Text::find($id)->delete();
-});
+  Route::delete('textables/{id}', function($id){
+    $text = Text::find($id)->delete();
+  });
 
-Route::put('textables', function(){
-  $text = Text::find(Input::get('id'));
-  $text->update(Input::all());
+  Route::put('textables', function(){
+    $text = Text::find(Input::get('id'));
+    $text->update(Input::all());
+  });
 });
 
 
@@ -109,48 +115,15 @@ Route::put('textables', function(){
 
 /* ============ IMAGE (able) ============= */
 
-Route::post('imageable', function(){
-  $path = public_path();
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('imageable', function(){
+    $path = public_path();
 
-  if( Input::has('updatefile') ){
+    if( Input::has('updatefile') ){
 
-    $photo = Photo::find(Input::get('updatefile'));
+      $photo = Photo::find(Input::get('updatefile'));
 
-    $file = Input::file('file');
-
-    $originalName = $file->getClientOriginalName();
-
-    $date = new DateTime();
-    $name = $date->getTimestamp();
-    $ext = $file->getClientOriginalExtension();
-
-    $filename = $name . '.' . $ext;
-
-    $image = \Image::make(Input::file('file')->getRealPath());
-
-    File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
-
-    $image->save($path.'/uploads/'.$name.'.'.$ext);
-
-    $image->resize(null, 200, true)->crop(100, 100);
-
-    $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
-
-    $thumbnail = $name.'_thumb.'.$ext;
-
-    $data = array(
-      'originalname' => $originalName,
-      'name' => $name,
-      'ext' => $ext,
-      'filename' => $filename,
-      'thumbnail' => $thumbnail
-    );
-
-    $photo->update($data);
-
-  }else{
-
-    if( count(Input::file('file')) > 0 ){
       $file = Input::file('file');
 
       $originalName = $file->getClientOriginalName();
@@ -180,27 +153,62 @@ Route::post('imageable', function(){
         'filename' => $filename,
         'thumbnail' => $thumbnail
       );
-    } else {
-      $data = Input::all();
+
+      $photo->update($data);
+
+    }else{
+
+      if( count(Input::file('file')) > 0 ){
+        $file = Input::file('file');
+
+        $originalName = $file->getClientOriginalName();
+
+        $date = new DateTime();
+        $name = $date->getTimestamp();
+        $ext = $file->getClientOriginalExtension();
+
+        $filename = $name . '.' . $ext;
+
+        $image = \Image::make(Input::file('file')->getRealPath());
+
+        File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
+
+        $image->save($path.'/uploads/'.$name.'.'.$ext);
+
+        $image->resize(null, 200, true)->crop(100, 100);
+
+        $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
+
+        $thumbnail = $name.'_thumb.'.$ext;
+
+        $data = array(
+          'originalname' => $originalName,
+          'name' => $name,
+          'ext' => $ext,
+          'filename' => $filename,
+          'thumbnail' => $thumbnail
+        );
+      } else {
+        $data = Input::all();
+      }
+
+      $photo = Photo::create($data);
+
+      if( Input::has('id') && Input::get('id') != 'undefined' ){
+        $containerId = Input::get('id');
+        $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+        $container = $containerType::find($containerId);
+        $container->images()->save($photo);
+      }
     }
 
-    $photo = Photo::create($data);
+    return $photo;
+  });
 
-    if( Input::has('id') && Input::get('id') != 'undefined' ){
-      $containerId = Input::get('id');
-      $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
-      $container = $containerType::find($containerId);
-      $container->images()->save($photo);
-    }
-  }
-
-  return $photo;
+  Route::put('imageable', function () {
+    return "PUT DOES NOT WORK!";
+  });
 });
-
-Route::put('imageable', function () {
-  return "PUT DOES NOT WORK!";
-});
-
 
 
 
@@ -210,30 +218,33 @@ Route::get('news', function(){
   return News::with('categories', 'images')->orderBy('created_at', 'DESC')->get();
 });
 
-Route::post('news', function(){
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('news', function(){
 
-  $data = Input::only('title', 'body');
-  $news = News::create($data);
+    $data = Input::only('title', 'body');
+    $news = News::create($data);
 
-  if( Input::has('images') && count(Input::get('images')) > 0 ){
-    $photo = Photo::find(Input::get('images')[0]['id']);
-    $news->images()->save($photo);    
-  }
+    if( Input::has('images') && count(Input::get('images')) > 0 ){
+      $photo = Photo::find(Input::get('images')[0]['id']);
+      $news->images()->save($photo);    
+    }
 
-  $cat = Input::get('tags');
-  $category = Category::find($cat['id']);
-  $news->categories()->attach($category);
+    $cat = Input::get('tags');
+    $category = Category::find($cat['id']);
+    $news->categories()->attach($category);
 
-  return News::with(array('images', 'categories'))->where('id', $news->id)->get()->first();
-});
+    return News::with(array('images', 'categories'))->where('id', $news->id)->get()->first();
+  });
 
-Route::delete('news/{id}', function($id){
-  $news = News::find($id)->delete();
-});
+  Route::delete('news/{id}', function($id){
+    $news = News::find($id)->delete();
+  });
 
-Route::put('news', function(){
-  $news = News::find(Input::get('id'));
-  $news->update(Input::all());
+  Route::put('news', function(){
+    $news = News::find(Input::get('id'));
+    $news->update(Input::all());
+  });
 });
 
 
@@ -241,28 +252,30 @@ Route::put('news', function(){
 
 /* ============ MARKERS ============= */
 
-Route::post('markers', function(){
-  $page = Page::find(Input::get('id'));
-  $marker = Marker::create(Input::all());
-  $page->markers()->save($marker);
-  return $marker;
-});
-
 Route::get('markers/{id}', function($id){
   $page = Page::with('markers')->find($id);
   //$markers = $page->markers();
   return $page;
 });
 
-Route::put('markers', function(){
-  $marker = Marker::find(Input::get('id'));
-  $marker->update(Input::all());
-});
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('markers', function(){
+    $page = Page::find(Input::get('id'));
+    $marker = Marker::create(Input::all());
+    $page->markers()->save($marker);
+    return $marker;
+  });
 
-Route::delete('markers/{id}', function($id){
-  $marker = Marker::find($id)->delete();
-});
+  Route::put('markers', function(){
+    $marker = Marker::find(Input::get('id'));
+    $marker->update(Input::all());
+  });
 
+  Route::delete('markers/{id}', function($id){
+    $marker = Marker::find($id)->delete();
+  });
+});
 
 
 
@@ -272,11 +285,13 @@ Route::get('categories', function(){
   return Category::all();
 });
 
-Route::post('categories', function(){
-  $category = Category::create(Input::all());
-  return $category;
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('categories', function(){
+    $category = Category::create(Input::all());
+    return $category;
+  });
 });
-
 
 
 
@@ -287,9 +302,12 @@ Route::get('posts/{id}', function($id){
   return $page->blogposts();
 });
 
-Route::post('posts', function(){
-  $page = Page::find(Input::get('id'));
-  $blogpost = Blogpost::create(Input::all());
-  $page->blogposts()->save($blogpost);
-  return $blogpost;
+Route::group(array('before' => 'auth.admin'), function()
+{
+  Route::post('posts', function(){
+    $page = Page::find(Input::get('id'));
+    $blogpost = Blogpost::create(Input::all());
+    $page->blogposts()->save($blogpost);
+    return $blogpost;
+  });
 });
