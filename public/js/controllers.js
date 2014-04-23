@@ -17,11 +17,21 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger']);
+var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger', 'cfp.hotkeys']);
 
 
 
-iziControllers.controller('PageController', function ($scope, $http) {
+iziControllers.controller('PageController', function ($scope, $http, hotkeys) {
+
+  // Init save action on ctrl+s
+  hotkeys.add({
+    combo: 'ctrl+s',
+    description: 'Save the page',
+    callback: function(event) {
+      event.preventDefault();
+      $http.put('pages', $scope.selectedPage);
+    }
+  });
 
   $http.get('pages').success(function (pages){
     $scope.pages = pages;
@@ -154,7 +164,7 @@ iziControllers.controller('PageController', function ($scope, $http) {
 
 });
 
-iziControllers.controller('TextController', function ($scope, $http) {
+iziControllers.controller('TextController', function ($scope, $http, hotkeys) {
 
   // This should be fixed for polymorhpism
   $scope.newTextable = function (container, containerType, text) {

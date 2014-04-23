@@ -24,10 +24,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ Config::get('board::app.name') }}</title>
 
-    {{ HTML::style(Config::get('board::cdn.bootstrap')) }}
-    {{ HTML::style('packages/wetcat/board/css/iziboard.css') }}
-    {{ HTML::style('packages/wetcat/board/css/angular-tagger.css') }}
+    {{-- Always attempt to load local bootstrap styles before going to CDN --}}
+    @if( file_exists('css/bootstrap.min.css') )
+      {{ HTML::style('css/bootstrap.min.css') }}
+    @elseif( file_exists('css/bootstrap.css') )
+      {{ HTML::style('css/bootstrap.css') }}
+    @else
+      {{ HTML::style(Config::get('board::cdn.bootstrap')) }}
+    @endif
 
+    {{ HTML::style('packages/wetcat/board/css/angular-tagger.css') }}
+    {{ HTML::style('packages/wetcat/board/css/hotkeys.min.css') }}
+
+    {{ HTML::style('packages/wetcat/board/css/iziboard.css') }}
   </head>
   <body ng-controller="PageController" >
 
@@ -49,6 +58,8 @@
     {{ HTML::script(Config::get('board::cdn.angular-bootstrap')) }}
     {{ HTML::script('packages/wetcat/board/js/placeholders-0.0.1-SNAPSHOT.min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-file-upload.min.js') }}
+
+    {{ HTML::script('packages/wetcat/board/js/hotkeys.min.js') }}
 
     {{ HTML::script('//maps.googleapis.com/maps/api/js?sensor=false') }}
     {{ HTML::script('packages/wetcat/board/js/underscore-min.js') }}

@@ -99,6 +99,11 @@ Route::delete('textables/{id}', function($id){
   $text = Text::find($id)->delete();
 });
 
+Route::put('textables', function(){
+  $text = Text::find(Input::get('id'));
+  $text->update(Input::all());
+});
+
 
 
 

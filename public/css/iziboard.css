@@ -60,6 +60,7 @@ input:focus {
   min-width: 200px;
 }
 
+/* Text-like textareas */
 textarea {
   background-color:transparent;
   border: 0px solid;
@@ -96,40 +97,30 @@ textarea:focus {
 .main-content {
   margin-top: 4em;
 }
-
 .fix-heading {
   display: inline;
 }
-
 [class$="-sign"],
 [class*="-sign "] {
   cursor: pointer;
 }
-
 [class$="-sign"]:hover,
 [class*="-sign "]:hover {
   cursor: pointer;
-  color: #ccc;
+  color: #333;
+}
+.remove-button {
+  position: absolute;
+  top: 2px;
+  right: 5px;
 }
 
 
 /* Toolbox popup */
-.edit-menu {
-  border:1px solid transparent;
-}
 .edit-menu:hover {
-  border-left: 1px solid #000;
+  background-color: rgba(0, 0, 0, 0.1);
 }
-.edit-toolbox {
-  background: #fff;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  padding: 2px 5px 2px 5px;
-  border: 1px solid #000;
-  display: inline-block;
-  z-index: 1000;
-}
+
 
 /* News styles */
 .news-container {
@@ -137,10 +128,12 @@ textarea:focus {
 .news-item {
 }
 
+
 /* Page selection dropdown */
 .page-type-selection {
   list-style: none;
 }
+
 
 /* Map styles */
 .angular-google-map-container { height: 400px; }

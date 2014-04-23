@@ -47,12 +47,8 @@
 
   <div ng-controller="TextController">
     <div class="col-xs-12 edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
-      
-      <p ng-if="(+text.description.length > 0)" contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true"></p>
-
-      <p ng-if="(+text.description.length <= 0)" contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true" ph-txt="{{ numCombined }}"></p>
-      
-      <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
+      <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
+      <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
     </div>
 
     <div ng-if="(+page.texts.length <= 0)">

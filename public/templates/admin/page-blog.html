@@ -38,8 +38,8 @@
       <div ng-repeat="blogitem in getBlogitems(page.currentBlogpost)">
 
         <div ng-if="blogitem.textable_id">
-          <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
-          <textarea msd-elastic class="vert edit-menu" ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="blogitem.description" btf-markdown="blogitem.description"></textarea>
+          <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
+          <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
         </div>
 
         <div ng-if="blogitem.imageable_id" ng-controller="ImageController">

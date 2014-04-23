@@ -33,14 +33,11 @@
     <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)" tooltip="Save" tooltip-placement="bottom"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Page', 'Lipsum...')" tooltip="Add text" tooltip-placement="bottom"></span></small></h1>
   </div>
 
-  <div>
-    <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
-      <p contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true">{{ text.description }}</p>
-      <p ng-if="(+text.description.length <= 0)" contenteditable ng-mouseenter="showTextTools = true" ng-mouseleave="showTextTools = false" ng-model="text.description" strip-br="true" ph-txt="{{ numCombined }}"></p>
-      <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
-    </div>
-    <div ng-if="(+page.texts.length <= 0)">
-      <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
-    </div>
+  <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
+    <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
+    <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
+  </div>
+  <div ng-if="(+page.texts.length <= 0)">
+    <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
   </div>
 </div>
