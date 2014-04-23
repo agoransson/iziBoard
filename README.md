@@ -58,4 +58,3 @@ Note that if you're using a locally stored bootstrap stylesheet you will likely 
 * [angular-hotkeys](https://chieffancypants.github.io/angular-hotkeys)
 * [underscore](http://underscorejs.org)
 * [elastic](https://github.com/monospaced/angular-elastic/blob/master/elastic.js)
-

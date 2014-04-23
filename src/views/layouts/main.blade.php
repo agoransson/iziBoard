@@ -59,22 +59,24 @@
     
     {{ HTML::script('//maps.googleapis.com/maps/api/js?sensor=false') }}
 
-    {{-- Extra dependencies --}}
-    {{ HTML::script('packages/wetcat/board/js/angular-file-upload-shim.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/placeholders-0.0.1-SNAPSHOT.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/angular-file-upload.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/hotkeys.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/underscore-min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/angular-google-maps.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/angular-sanitize.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/showdown.js') }}
-    {{ HTML::script('packages/wetcat/board/js/elastic.js') }}
+    {{-- Libs --}}
+    {{ HTML::script('packages/wetcat/board/lib/angular-file-upload-shim.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/placeholders-0.0.1-SNAPSHOT.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/angular-file-upload.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/hotkeys.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/underscore-min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/angular-google-maps.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/angular-sanitize.min.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/showdown.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/elastic.js') }}
+    {{ HTML::script('packages/wetcat/board/lib/angular-tagger.js') }}
 
+    {{-- App --}}
     {{ HTML::script('packages/wetcat/board/js/controllers.js') }}
+    {{ HTML::script('packages/wetcat/board/js/services.js') }}
     {{ HTML::script('packages/wetcat/board/js/filters.js') }}
     {{ HTML::script('packages/wetcat/board/js/directives.js') }}
     {{ HTML::script('packages/wetcat/board/js/factories.js') }}
     {{ HTML::script('packages/wetcat/board/js/app.js') }}
-    {{ HTML::script('packages/wetcat/board/js/angular-tagger.js') }}
   </body>
 </html>
