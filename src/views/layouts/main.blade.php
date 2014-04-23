@@ -33,8 +33,8 @@
       {{ HTML::style(Config::get('board::cdn.bootstrap')) }}
     @endif
 
-    {{ HTML::style('packages/wetcat/board/css/angular-tagger.css') }}
-    {{ HTML::style('packages/wetcat/board/css/hotkeys.min.css') }}
+    {{ HTML::style('packages/wetcat/board/lib/angular-tagger.css') }}
+    {{ HTML::style('packages/wetcat/board/lib/hotkeys.min.css') }}
 
     {{ HTML::style('packages/wetcat/board/css/iziboard.css') }}
   </head>
