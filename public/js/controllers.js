@@ -157,9 +157,9 @@ iziControllers.controller('PageController', function ($scope, $http) {
 iziControllers.controller('TextController', function ($scope, $http) {
 
   // This should be fixed for polymorhpism
-  $scope.newTextable = function (page, text) {
+  $scope.newTextable = function (container, containerType, text) {
     if( $scope.selectedPage.texts.length < 4 ){
-      var txt = {id: page.id, description: text};
+      var txt = {id: container.id, type: containerType, description: text};
       $http.post('textables', txt).success(function (data){
         $scope.selectedPage.texts.push(data);
       });  
@@ -274,17 +274,18 @@ iziControllers.controller('MarkerController', function ($scope, $http) {
 
 
 iziControllers.controller('ImageController', function ($scope, $upload) {  
-  $scope.onFileSelect = function ($files, imageOwner, ownerType, update) {
+  $scope.onFilePost = function ($files, imageOwner, ownerType, updatefile) {
+
     //$files: an array of files selected, each file has name, size, and type.
     for (var i = 0; i < $files.length; i++) {
       var file = $files[i];
 
       $scope.upload = $upload.upload({
         url: 'imageable', //upload.php script, node.js route, or servlet url
-        method: (update ? 'PUT' : 'POST'),
+        method: 'POST',
         // headers: {'header-key': 'header-value'},
         // withCredentials: true,
-        data: {id: imageOwner.id, type: ownerType},
+        data: {id: imageOwner.id, type: ownerType, updatefile: (updatefile ? updatefile.id : '')},
         file: file, // or list of files: $files for html5 only
         /* set the file formData name ('Content-Desposition'). Default is 'file' */
         //fileFormDataName: myFile, //or a list of names for multiple files (html5).
@@ -295,12 +296,46 @@ iziControllers.controller('ImageController', function ($scope, $upload) {
       }).success(function (data, status, headers, config) {
         // file is uploaded successfully
         //$scope.selectedPage.images.push(data);
-        if( typeof imageOwner.images != 'undefined' )
+        if( typeof imageOwner.images != 'undefined' ){
           imageOwner.images.push(data);
-        else{
+        }else if(updatefile){
+          updatefile = data;
+        }else{
           imageOwner.images = [];
           imageOwner.images.push(data);
         }
+      });
+      //.error(...)
+      //.then(success, error, progress); 
+      //.xhr(function (xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
+    }
+    /* alternative way of uploading, send the file binary with the file's content-type.
+       Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
+       It could also be used to monitor the progress of a normal http post/put request with large data*/
+    // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
+  };
+
+  $scope.onFilePut = function ($files, file) {
+    //$files: an array of files selected, each file has name, size, and type.
+    for (var i = 0; i < $files.length; i++) {
+      var file = $files[i];
+
+      $scope.upload = $upload.upload({
+        url: 'imageable', //upload.php script, node.js route, or servlet url
+        method: 'PUT',
+        // headers: {'header-key': 'header-value'},
+        // withCredentials: true,
+        data: {id: file.id},
+        file: file, // or list of files: $files for html5 only
+        /* set the file formData name ('Content-Desposition'). Default is 'file' */
+        //fileFormDataName: myFile, //or a list of names for multiple files (html5).
+        /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
+        //formDataAppender: function (formData, key, val){}
+      }).progress(function (evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function (data, status, headers, config) {
+        // file is uploaded successfully
+        //$scope.selectedPage.images.push(data);
       });
       //.error(...)
       //.then(success, error, progress); 
@@ -443,10 +478,12 @@ iziControllers.controller('BlogController', function ($scope, $http){
       items = items.concat(post.texts);
     }
 
+    items.sort(compare);
+
     return items;
   }
 
-  $scope.addBlogImage = function (post) {
+  $scope.addBlogImage = function (post, dropfile) {
     var image = {
       id: post.id,
       type: 'Blogpost',
@@ -454,7 +491,8 @@ iziControllers.controller('BlogController', function ($scope, $http){
       name: '',
       ext: '',
       filename: '',
-      thumbnail: ''
+      thumbnail: '',
+      file: dropfile
     };
 
     $http.post('imageable', image).success(function (data) {
@@ -474,5 +512,14 @@ iziControllers.controller('BlogController', function ($scope, $http){
       post.texts.push(data);
     });
   }
+
+  function compare(a,b) {
+    if (a.created_at < b.created_at)
+       return -1;
+    if (a.created_at > b.created_at)
+      return 1;
+    return 0;
+  }
+
 
 });

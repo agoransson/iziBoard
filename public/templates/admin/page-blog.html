@@ -43,11 +43,12 @@
         </div>
 
         <div ng-if="blogitem.imageable_id" ng-controller="ImageController">
-          <div ng-if="blogitem.src" ng-file-drop="onFileSelect($files, blogitem, '', true)" ng-file-drag-over-class="optional-css-class">
-            <img class="img-responsive" ng-src="uploads/{{ blogitem.src }}" />
+          
+          <div ng-if="blogitem.filename" ng-file-drop="onFilePost($files, '', '', blogitem)" ng-file-drag-over-class="optional-css-class">
+            <img class="img-responsive" ng-model="blogitem" ng-src="uploads/{{ blogitem.filename }}" />
           </div>
-
-          <div ng-if="!blogitem.src" ng-file-drop="onFileSelect($files, blogitem, '', true)" ng-file-drag-over-class="optional-css-class">
+          
+          <div ng-if="!blogitem.filename" ng-file-drop="onFilePost($files, '', '', blogitem)" ng-file-drag-over-class="optional-css-class">
             <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="Drop image here"/>
           </div>
 

@@ -34,15 +34,14 @@
   </div>
 
   <div class="col-xs-12" ng-controller="ImageController">
-    <div ng-if="(+page.images.length > 0)" ng-file-drop="onFileSelect($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
-
+    <div ng-if="(+page.images.length > 0)" ng-file-drop="onFilePost($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
       <div>
         <carousel interval="myInterval">
           <slide ng-repeat="image in page.images" active="slide.active">
             <img ng-src="uploads/{{ image.filename }}" style="margin:auto;"/>
             <div class="carousel-caption">
-              <h4></h4>
-              <p></p>
+              <h4>{{ image.originalname }}</h4>
+              <h4>{{ image.originalname }}</h4>
             </div>
           </slide>
         </carousel>
@@ -50,7 +49,7 @@
       
     </div>
 
-    <div ng-if="(+page.images.length <= 0)" ng-file-drop="onFileSelect($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
+    <div ng-if="(+page.images.length <= 0)" ng-file-drop="onFilePost($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
       <img class="img-rounded img-responsive" ph-img="1200x400" ph-txt="Drop image here"/>
     </div>
   </div>
@@ -64,9 +63,7 @@
       <div ng-include="'packages/wetcat/board/templates/partials/edit-toolbox.html'"></div>
     </div>
     <div ng-if="(+page.texts.length <= 0)">
-      <div class="col-xs-12">
-        <span class="glyphicon glyphicon-ok-sign" ng-click="newTextable(page, 'Lipsum...')"></span> Add new column
-      </div>
+      <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
     </div>
   </div>
 </div>

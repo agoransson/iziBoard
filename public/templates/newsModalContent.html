@@ -10,11 +10,11 @@
       </div>
       
       <div class="col-xs-4" ng-controller="ImageController">
-        <div ng-if="false" ng-file-drop="onFileSelect($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
+        <div ng-if="false" ng-file-drop="onFilePost($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
           <img class="img-responsive" ng-src="uploads/{{ newsitem.images[newsitem.images.length-1].filename }}" />
         </div>
 
-        <div ng-if="true" ng-file-drop="onFileSelect($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
+        <div ng-if="true" ng-file-drop="onFilePost($files, newsitem, 'News')" ng-file-drag-over-class="dropactive">
           <img class="img-rounded img-responsive" ph-img="400x200" ph-txt="Drop image here"/>
         </div>
       </div>

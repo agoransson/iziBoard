@@ -107,7 +107,10 @@ Route::delete('textables/{id}', function($id){
 Route::post('imageable', function(){
   $path = public_path();
 
-  if( Input::has('file') ){
+  if( Input::has('updatefile') ){
+
+    $photo = Photo::find(Input::get('updatefile'));
+
     $file = Input::file('file');
 
     $originalName = $file->getClientOriginalName();
@@ -137,66 +140,60 @@ Route::post('imageable', function(){
       'filename' => $filename,
       'thumbnail' => $thumbnail
     );
-    return "OK";
-    $photo = Photo::create($data);
-  }else{
-    return "NOK";
-    $photo = Photo::create(Input::all());
-  }
 
-  
-  if( Input::has('id') && Input::get('id') != 'undefined' ){
-    $containerId = Input::get('id');
-    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
-    $container = $containerType::find($containerId);
-    $container->images()->save($photo);
+    $photo->update($data);
+
+  }else{
+
+    if( count(Input::file('file')) > 0 ){
+      $file = Input::file('file');
+
+      $originalName = $file->getClientOriginalName();
+
+      $date = new DateTime();
+      $name = $date->getTimestamp();
+      $ext = $file->getClientOriginalExtension();
+
+      $filename = $name . '.' . $ext;
+
+      $image = \Image::make(Input::file('file')->getRealPath());
+
+      File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
+
+      $image->save($path.'/uploads/'.$name.'.'.$ext);
+
+      $image->resize(null, 200, true)->crop(100, 100);
+
+      $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
+
+      $thumbnail = $name.'_thumb.'.$ext;
+
+      $data = array(
+        'originalname' => $originalName,
+        'name' => $name,
+        'ext' => $ext,
+        'filename' => $filename,
+        'thumbnail' => $thumbnail
+      );
+    } else {
+      $data = Input::all();
+    }
+
+    $photo = Photo::create($data);
+
+    if( Input::has('id') && Input::get('id') != 'undefined' ){
+      $containerId = Input::get('id');
+      $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+      $container = $containerType::find($containerId);
+      $container->images()->save($photo);
+    }
   }
 
   return $photo;
 });
 
 Route::put('imageable', function () {
-  $path = public_path();
-
-  $file = Input::file('file');
-
-  $originalName = $file->getClientOriginalName();
-
-  $date = new DateTime();
-  $name = $date->getTimestamp();
-  $ext = $file->getClientOriginalExtension();
-
-  $filename = $name . '.' . $ext;
-
-  $image = \Image::make(Input::file('file')->getRealPath());
-
-  File::exists($path.'/uploads/') or File::makeDirectory($path.'/uploads/');
-
-  $image->save($path.'/uploads/'.$name.'.'.$ext);
-
-  $image->resize(null, 200, true)->crop(100, 100);
-
-  $image->save($path.'/uploads/'.$name.'_thumb.'.$ext);
-
-  $thumbnail = $name.'_thumb.'.$ext;
-
-  $data = array(
-    'originalname' => $originalName,
-    'name' => $name,
-    'ext' => $ext,
-    'filename' => $filename,
-    'thumbnail' => $thumbnail);
-  $photo = Photo::find(Input::get('id'))->update($data);
-
-  
-  if( Input::has('id') && Input::get('id') != 'undefined' ){
-    $containerId = Input::get('id');
-    $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
-    $container = $containerType::find($containerId);
-    $container->images()->save($photo);
-  }
-
-  return $photo;
+  return "PUT DOES NOT WORK!";
 });
 
 

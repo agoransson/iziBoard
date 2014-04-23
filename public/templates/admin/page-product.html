@@ -30,15 +30,15 @@
 <div class="row">
   <div class="col-xs-12">
     <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
-    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="saveProduct(page)" tooltip="Save" tooltip-placement="bottom"></span></small></h1>
+    <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)" tooltip="Save" tooltip-placement="bottom"></span></small></h1>
   </div>
 
 
   <div class="col-md-6 col-xs-12" ng-controller="ImageController">
-    <div ng-if="(+page.images.length > 0)" ng-file-drop="onFileSelect($files, page)" ng-file-drag-over-class="optional-css-class">
+    <div ng-if="(+page.images.length > 0)" ng-file-drop="onFilePost($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
       <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
     </div>
-    <div ng-if="(+page.images.length <= 0)" ng-file-drop="onFileSelect($files, page)" ng-file-drag-over-class="optional-css-class">
+    <div ng-if="(+page.images.length <= 0)" ng-file-drop="onFilePost($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
       <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="Drop image here"/>
     </div>
   </div>
