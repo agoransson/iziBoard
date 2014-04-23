@@ -37,3 +37,22 @@ The package uses Bootstrap for frontend, per default it will use the bootswatch 
 You can also change what bootstrap CDN to use in the config.
 
 Note that if you're using a locally stored bootstrap stylesheet you will likely need to install the glyphicon set locally as well, bootstrap uses [Glyphicon halflings set](http://glyphicons.com/)
+
+## Credits
+
+### Frameworks used for iziBoard
+
+* [AngularJS - Superheroic JavaScript MVW Framework](https://angularjs.org/)
+* [Laravel - PHP Framework for web artisans](http://laravel.com/)
+
+#### Angular directives and libraries used to produce iziBoard
+
+* [AngularJS directives for Google Maps](https://github.com/nlaplante/angular-google-maps.git)
+* [angular-file-upload](https://github.com/danialfarid/angular-file-upload)
+* [angular-tagger](https://github.com/monterail/angular-tagger)
+* [angular-sanitize](http://angularjs.org)
+* [angular-google-maps](https://github.com/nlaplante/angular-google-maps.git)
+* [showdown](http://www.attacklab.net/)
+* [angular-hotkeys](https://chieffancypants.github.io/angular-hotkeys)
+* [underscore](http://underscorejs.org)
+

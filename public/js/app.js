@@ -17,4 +17,4 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var app = angular.module('izi', ['iziControllers', 'iziFilters', 'iziDirectives', 'iziFactories', 'monospaced.elastic']);
+var app = angular.module('izi', ['iziControllers', 'iziFilters', 'iziDirectives', 'iziFactories']);

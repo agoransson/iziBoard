@@ -53,21 +53,22 @@
       </div>
     </div>
 
-    {{ HTML::script('packages/wetcat/board/js/angular-file-upload-shim.min.js') }}
+    {{-- Core libraries --}}
     {{ HTML::script(Config::get('board::cdn.angular')) }}
     {{ HTML::script(Config::get('board::cdn.angular-bootstrap')) }}
+    
+    {{ HTML::script('//maps.googleapis.com/maps/api/js?sensor=false') }}
+    
+    {{-- Extra dependencies --}}
+    {{ HTML::script('packages/wetcat/board/js/angular-file-upload-shim.min.js') }}
     {{ HTML::script('packages/wetcat/board/js/placeholders-0.0.1-SNAPSHOT.min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-file-upload.min.js') }}
-
     {{ HTML::script('packages/wetcat/board/js/hotkeys.min.js') }}
-
-    {{ HTML::script('//maps.googleapis.com/maps/api/js?sensor=false') }}
     {{ HTML::script('packages/wetcat/board/js/underscore-min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-google-maps.min.js') }}
     {{ HTML::script('packages/wetcat/board/js/angular-sanitize.min.js') }}
-    {{ HTML::script('packages/wetcat/board/js/elastic.js') }}
     {{ HTML::script('packages/wetcat/board/js/showdown.js') }}
-    
+
     {{ HTML::script('packages/wetcat/board/js/controllers.js') }}
     {{ HTML::script('packages/wetcat/board/js/filters.js') }}
     {{ HTML::script('packages/wetcat/board/js/directives.js') }}
