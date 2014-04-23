@@ -295,7 +295,7 @@ Route::group(array('before' => 'auth.admin'), function()
 
 
 
-/* ============ CATEGORIES ============= */
+/* ============ POSTS ============= */
 
 Route::get('posts/{id}', function($id){
   $page = Page::find($id);
@@ -311,3 +311,31 @@ Route::group(array('before' => 'auth.admin'), function()
     return $blogpost;
   });
 });
+
+
+
+
+/* ============ USERS ============= */
+
+Route::group(array('before' => 'auth.guest'), function()
+{
+  Route::post('users/login', function(){
+    return "Login";
+  });
+
+  Route::post('users/register', function(){
+    return "Register";
+  });
+});
+
+Route::group(array('before' => 'auth'), function()
+{
+  Route::post('users/logout', function(){
+    return "Logout";
+  });
+
+  Route::put('users', function(){
+    return "Update";
+  });
+});
+

@@ -39,6 +39,8 @@ return [
 
     'name'  =>  'iziBoard installation',
 
+    'user-registration'  =>  'yes',
+
   ),
 
 ];

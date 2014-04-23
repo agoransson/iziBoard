@@ -533,3 +533,28 @@ iziControllers.controller('BlogController', function ($scope, $http){
 
 
 });
+
+iziControllers.controller('UserController', function ($scope, $http) {
+
+  $scope.register = function () {
+    var user = {};
+    $http.post('users/register', user).success(function (data) {
+      console.log(data);
+    });
+  }
+
+  $scope.login = function () {
+    var user = {};
+    $http.post('users/login', user).success(function (data) {
+      console.log(data);
+    });
+  }
+
+  $scope.logout = function () {
+    var user = {};
+    $http.post('users/logout', user).success(function (data) {
+      console.log(data);
+    });
+  }
+
+});

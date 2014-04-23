@@ -39,6 +39,12 @@ Route::filter('auth', function()
     return Redirect::guest('login');
 });
 
+Route::filter('auth.guest', function()
+{
+  if( Sentry::check() )
+    return Redirect::to('/');
+});
+
 
 Route::filter('auth.admin', function()
 {

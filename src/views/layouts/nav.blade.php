@@ -74,6 +74,20 @@
           </ul>
         </li>
       </ul>
+
+      {{-- Render registration links --}}
+      @elseif( Config::get('board::app.user-registration') === 'yes' )
+      <ul class="nav navbar-nav navbar-right" ng-controller="UserController">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Registration <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            {{-- Pages --}}
+            <li><a href ng-click="register()"><span class="glyphicon glyphicon-plus"></span> Register</a></li>
+            <li><a href ng-click="login()"><span class="glyphicon glyphicon-minus"></span> Login</a></li>
+            <li><a href ng-click="logout()"><span class="glyphicon glyphicon-check"></span> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
       @endif
 
 
