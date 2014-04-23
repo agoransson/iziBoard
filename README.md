@@ -15,6 +15,8 @@
 
 * This package uses it's own routes, you must remove the root ('/') route in laravel.
 
+* Run database migrations ```php artisan migrate --package="wetcat/board"```
+
 ## This package uses Intervention/Image 
 
 * To publish the Intervention assets (not required) run ```php artisan asset:publish intervention/image```
