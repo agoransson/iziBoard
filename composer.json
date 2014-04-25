@@ -17,8 +17,7 @@
             "Wetcat\\Board": "src/"
         },
         "classmap":[
-            "src/migrations",
-            "src/seeds"
+            "src/migrations"
         ]
     },
     "minimum-stability": "stable"
