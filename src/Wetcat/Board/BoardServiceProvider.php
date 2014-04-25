@@ -46,7 +46,7 @@ class BoardServiceProvider extends ServiceProvider {
 		$this->package('wetcat/board');
 
     include __DIR__.'/../../routes.php';
-		include __DIR__.'/../../filters.php';
+		//include __DIR__.'/../../filters.php';
 
     $this->app->booting(function()
 		{

@@ -56,7 +56,7 @@ Route::get('pages', function(){
   return Page::with(array('texts', 'images', 'markers', 'blogposts', 'blogposts.images', 'blogposts.texts'))->get();
 });
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('pages', function(){
     $page = Page::create(Input::all());
@@ -85,7 +85,7 @@ Route::group(array('before' => 'auth.admin'), function()
 
 /* ============ TEXT (able) ============= */
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('textables', function(){
     $text = Text::create(Input::only('description'));
@@ -115,7 +115,7 @@ Route::group(array('before' => 'auth.admin'), function()
 
 /* ============ IMAGE (able) ============= */
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('imageable', function(){
     $path = public_path();
@@ -218,7 +218,7 @@ Route::get('news', function(){
   return News::with('categories', 'images')->orderBy('created_at', 'DESC')->get();
 });
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('news', function(){
 
@@ -258,7 +258,7 @@ Route::get('markers/{id}', function($id){
   return $page;
 });
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('markers', function(){
     $page = Page::find(Input::get('id'));
@@ -285,7 +285,7 @@ Route::get('categories', function(){
   return Category::all();
 });
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('categories', function(){
     $category = Category::create(Input::all());
@@ -302,7 +302,7 @@ Route::get('posts/{id}', function($id){
   return $page->blogposts();
 });
 
-Route::group(array('before' => 'auth.admin'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('posts', function(){
     $page = Page::find(Input::get('id'));
@@ -317,7 +317,7 @@ Route::group(array('before' => 'auth.admin'), function()
 
 /* ============ USERS ============= */
 
-Route::group(array('before' => 'auth.guest'), function()
+Route::group(array('before' => 'guest|csrf'), function()
 {
   Route::post('users/login', function(){
     return "Login";
@@ -328,7 +328,7 @@ Route::group(array('before' => 'auth.guest'), function()
   });
 });
 
-Route::group(array('before' => 'auth'), function()
+Route::group(array('before' => 'auth|csrf'), function()
 {
   Route::post('users/logout', function(){
     return "Logout";
@@ -338,4 +338,3 @@ Route::group(array('before' => 'auth'), function()
     return "Update";
   });
 });
-

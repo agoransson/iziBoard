@@ -20,8 +20,7 @@
 var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger', 'cfp.hotkeys']);
 
 
-
-iziControllers.controller('PageController', function ($scope, $http, hotkeys) {
+iziControllers.controller('PageController', function ($scope, $http, CSRF_TOKEN, hotkeys) {
 
   // Init save action on ctrl+s
   hotkeys.add({
@@ -534,24 +533,33 @@ iziControllers.controller('BlogController', function ($scope, $http){
 
 });
 
-iziControllers.controller('UserController', function ($scope, $http) {
+
+
+
+iziControllers.controller('UserController', function ($scope, $http, CSRF_TOKEN) {
 
   $scope.register = function () {
-    var user = {};
+    var user = {
+      _token: CSRF_TOKEN
+    };
     $http.post('users/register', user).success(function (data) {
       console.log(data);
     });
   }
 
   $scope.login = function () {
-    var user = {};
+    var user = {
+      _token: CSRF_TOKEN
+    };
     $http.post('users/login', user).success(function (data) {
       console.log(data);
     });
   }
 
   $scope.logout = function () {
-    var user = {};
+    var user = {
+      _token: CSRF_TOKEN
+    };
     $http.post('users/logout', user).success(function (data) {
       console.log(data);
     });

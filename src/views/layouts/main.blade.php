@@ -78,5 +78,9 @@
     {{ HTML::script('packages/wetcat/board/js/directives.js') }}
     {{ HTML::script('packages/wetcat/board/js/factories.js') }}
     {{ HTML::script('packages/wetcat/board/js/app.js') }}
+
+    <script type="text/javascript">
+    angular.module("izi").constant("CSRF_TOKEN", '{{ csrf_token() }}');
+    </script>
   </body>
 </html>

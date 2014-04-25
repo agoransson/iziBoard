@@ -37,7 +37,7 @@ return [
 
   'app' => array(
 
-    'name'  =>  'iziBoard installation',
+    'name'  =>  'iziBoard',
 
     'user-registration'  =>  'yes',
 

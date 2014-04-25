@@ -10,15 +10,15 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "4.1.*",
-        "intervention/image": "1.*",
-        "cartalyst/sentry": "2.1.*"
+        "intervention/image": "1.*"
     },
     "autoload": {
         "psr-0": {
             "Wetcat\\Board": "src/"
         },
         "classmap":[
-            "src/migrations"
+            "src/migrations",
+            "src/seeds"
         ]
     },
     "minimum-stability": "stable"
