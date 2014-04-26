@@ -40,7 +40,10 @@ class InitBoardCommand extends Command {
 		//Artisan::call('migrate --package=tappleby/laravel-auth-token');
 		//Artisan::call('config:publish tappleby/laravel-auth-token'):
 
-
+		$this->call(
+        'migrate',
+        array('--package' => 'cartalyst/sentry')
+    );
     $this->call(
         'migrate',
         array('--package' => 'tappleby/laravel-auth-token')
@@ -51,6 +54,9 @@ class InitBoardCommand extends Command {
     );
     $this->call(
         'asset:publish', array('wetcat/board')
+    );
+    $this->call(
+        'config:publish', array('wetcat/board')
     );
 
 	}
