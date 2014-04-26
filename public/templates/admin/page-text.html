@@ -16,7 +16,7 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  -->
-<li class="dropdown page-type-selection">
+<li class="dropdown page-type-selection" ng-if="isAdmin()">
   <a class="dropdown-toggle">
     {{ page.type }}
   </a>
@@ -28,16 +28,21 @@
 </li>
 
 <div class="row" ng-controller="TextController">
-  <div class="col-xs-12">
+  <div class="col-xs-12" ng-if="isAdmin()">
     <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
     <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)" tooltip="Save" tooltip-placement="bottom"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Page', 'Lipsum...')" tooltip="Add text" tooltip-placement="bottom"></span></small></h1>
   </div>
+  <div class="col-xs-12" ng-if="!isAdmin()">
+    <h1 ng-model="page.heading">{{ page.heading }}</h1>
+  </div>
 
-  <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
+  <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0 && isAdmin())">
     <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
     <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
   </div>
-  <div ng-if="(+page.texts.length <= 0)">
-    <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
+
+  <div class="col-md-{{ 12 / page.texts.length }}" ng-repeat="text in page.texts" ng-controller="TextController" ng-if="(+page.texts.length > 0 && !isAdmin())">
+    <p ng-model="text.description" btf-markdown="text.description"></p>
   </div>
+
 </div>

@@ -44,7 +44,6 @@
     <div ng-if="(+page.images.length > 0)">
       <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
     </div>
-
     <div ng-if="(+page.images.length <= 0)">
       <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="No image found"/>
     </div>
@@ -84,10 +83,6 @@
     <!-- Admin text controls -->
     <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
     <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
-  </div>
-  <div ng-if="(+page.texts.length <= 0 && isAdmin())">
-    <!-- Admin text controls -->
-    <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
   </div>
 
 
