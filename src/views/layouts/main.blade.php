@@ -38,19 +38,23 @@
 
     {{ HTML::style('packages/wetcat/board/css/iziboard.css') }}
   </head>
-  <body ng-controller="PageController" >
+  <body ng-controller="UserController">
 
-    @include('board::layouts.nav')
-    <div class="container main-content" ng-controller="NewsController">
-      @section('content')
-      @show
-    </div>
 
-    <div id="footer">
-      <div class="container">
-        @section('footer')
+    <div ng-controller="PageController">
+      @include('board::layouts.nav')
+      <div class="container main-content" ng-controller="NewsController">
+        @section('content')
         @show
       </div>
+
+      <div id="footer">
+        <div class="container">
+          @section('footer')
+          @show
+        </div>
+      </div>
+
     </div>
 
     {{-- Core libraries --}}
@@ -70,6 +74,8 @@
     {{ HTML::script('packages/wetcat/board/lib/showdown.js') }}
     {{ HTML::script('packages/wetcat/board/lib/elastic.js') }}
     {{ HTML::script('packages/wetcat/board/lib/angular-tagger.js') }}
+    {{-- HTML::script('packages/wetcat/board/lib/angular-route.js') --}}
+    {{ HTML::script('packages/wetcat/board/lib/ngStorage.min.js') }}
 
     {{-- App --}}
     {{ HTML::script('packages/wetcat/board/js/controllers.js') }}

@@ -36,29 +36,78 @@ class InitBoardCommand extends Command {
 	 * @return mixed
 	 */
 	public function fire()
-	{
-		//Artisan::call('migrate --package=tappleby/laravel-auth-token');
-		//Artisan::call('config:publish tappleby/laravel-auth-token'):
+	{  
+    $bench = $this->argument('bench');
 
-		$this->call(
+		// Migrations
+    if( !$bench ) {
+      // Normal environment
+      $this->call(
         'migrate',
         array('--package' => 'cartalyst/sentry')
-    );
-    $this->call(
-        'migrate',
-        array('--package' => 'tappleby/laravel-auth-token')
-    );
-    $this->call(
+      );
+      $this->call(
         'migrate',
         array('--package' => 'wetcat/board')
-    );
-    $this->call(
-        'asset:publish', array('wetcat/board')
-    );
-    $this->call(
-        'config:publish', array('wetcat/board')
-    );
+      );
+    } else {
+      // Development environment
+      $this->call(
+        'migrate',
+        array('--path' => 'workbench/wetcat/board/vendor/cartalyst/sentry/src/migrations/')
+      );
+      $this->call(
+        'migrate',
+        array('--bench' => 'wetcat/board')
+      );
+    }
+    $this->info('Migrations finished!');
 
+
+
+    // Publish assets
+    if( !$bench ){
+      $this->call(
+        'asset:publish', array('wetcat/board')
+      );
+    } else {
+      $this->call(
+        'asset:publish', array('--bench' => 'wetcat/board')
+      );
+    }
+    $this->info('Assets finished!');
+
+
+
+    // Publish config
+    if( !$bench ){
+      $this->call(
+        'config:publish', array('wetcat/board')
+      );
+    } else {
+      // php artisan config:publish --path="workbench/wetcat/board/src/config/" wetcat/board
+      /*$this->call(
+        'config:publish', array('--path' => 'workbench/wetcat/board/src/config/', 'wetcat/board')
+      );*/
+    }
+    $this->info('Configs finished!');
+
+
+
+    // Add the admin user
+    if( !$bench ) {
+      /*$this->call(
+      	'db:seed', array('--class' => 'UserTableSeeder')
+      );*/
+    } else {
+      // ?
+    }
+    $this->info('Seeds finished!');
+
+
+
+    // Create default admin group
+    $this->createAdminGroup();
 	}
 
 	/**
@@ -69,7 +118,7 @@ class InitBoardCommand extends Command {
 	protected function getArguments()
 	{
 		return array(
-			//array('example', InputArgument::REQUIRED, 'An example argument.'),
+			array('bench', InputArgument::OPTIONAL, 'Use if workbench environment'),
 		);
 	}
 
@@ -84,5 +133,29 @@ class InitBoardCommand extends Command {
 			//array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
 		);
 	}
+
+
+  private function createAdminGroup()
+  {
+    try
+    {
+        // Create the group
+        $group = \Sentry::createGroup(array(
+            'name'        => 'Admins',
+            'permissions' => array(
+                'admin' => 1,
+                'user' => 1,
+            ),
+        ));
+    }
+    catch (Cartalyst\Sentry\Groups\NameRequiredException $e)
+    {
+        echo 'Name field is required';
+    }
+    catch (Cartalyst\Sentry\Groups\GroupExistsException $e)
+    {
+        echo 'Group already exists';
+    }
+  }
 
 }

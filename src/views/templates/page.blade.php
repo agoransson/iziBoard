@@ -17,8 +17,4 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 --}}
 
-@if( \Auth::check() /* && add roles to auth and check for admin privileges */ )
-  <page-item ng-include="'packages/wetcat/board/templates/admin/page-'+page.type+'.html'" ng-show="selectedPage == page"></page-item>
-@else
-  <page-item ng-include="'packages/wetcat/board/templates/user/page-'+page.type+'.html'" ng-show="selectedPage == page"></page-item>
-@endif
+<page-item ng-include="'packages/wetcat/board/templates/admin/page-'+page.type+'.html'" ng-show="selectedPage == page"></page-item>

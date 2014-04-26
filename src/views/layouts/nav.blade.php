@@ -50,46 +50,45 @@
       </ul>
 
       {{-- Render admin --}}
-      <ul class="nav navbar-nav navbar-right" ng-controller="UserController">
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="dropdown" ng-if="isAdmin()">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            {{-- Pages --}}
+            <li><a href ng-click="newPage()"><span class="glyphicon glyphicon-plus"></span> Add page</a></li>
+            <li><a href ng-click="deletePage(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove page</a></li>
+            <li><a href ng-click="savePage(selectedPage)"><span class="glyphicon glyphicon-check"></span> Save page</a></li>
+            
+            {{-- Products --}}
+            <li class="divider"></li>
+            <li><a href ng-click="toggleProducts()"><span ng-class="{'glyphicon-check': productsEnabled, 'glyphicon-unchecked': !productsEnabled}" class="glyphicon"></span> @{{ productsEnabled ? 'Disable' : 'Enable' }} products</a></li>
+            <li ng-if="productsEnabled"><a href ng-click="newProduct()"><span class="glyphicon glyphicon-plus"></span> Add product</a></li>
+            <li ng-if="productsEnabled"><a href ng-click="deleteProduct(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove product</a></li>
+
+            {{-- Blogs --}}
+            <li class="divider"></li>
+            <li><a href ng-click="toggleBlogs()"><span ng-class="{'glyphicon-check': blogsEnabled, 'glyphicon-unchecked': !blogsEnabled}" class="glyphicon"></span> @{{ blogsEnabled ? 'Disable' : 'Enable' }} blogs</a></li>
+            <li ng-if="blogsEnabled"><a href ng-click="newBlog()"><span class="glyphicon glyphicon-plus"></span> Add blog</a></li>
+            <li ng-if="blogsEnabled"><a href ng-click="deleteBlog(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove blog</a></li>
+          </ul>
+        </li>
+
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Config::get('board::app.name') }}  <b class="caret"></b></a>
           <ul class="dropdown-menu">
 
-            @if( \Auth::check() /* && add roles to auth and check for admin privileges */ )
-              {{-- Pages --}}
-              <li><a href ng-click="newPage()"><span class="glyphicon glyphicon-plus"></span> Add page</a></li>
-              <li><a href ng-click="deletePage(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove page</a></li>
-              <li><a href ng-click="savePage(selectedPage)"><span class="glyphicon glyphicon-check"></span> Save page</a></li>
-              
-              {{-- Products --}}
-              <li class="divider"></li>
-              <li><a href ng-click="toggleProducts()"><span ng-class="{'glyphicon-check': productsEnabled, 'glyphicon-unchecked': !productsEnabled}" class="glyphicon"></span> @{{ productsEnabled ? 'Disable' : 'Enable' }} products</a></li>
-              <li ng-if="productsEnabled"><a href ng-click="newProduct()"><span class="glyphicon glyphicon-plus"></span> Add product</a></li>
-              <li ng-if="productsEnabled"><a href ng-click="deleteProduct(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove product</a></li>
-
-              {{-- Blogs --}}
-              <li class="divider"></li>
-              <li><a href ng-click="toggleBlogs()"><span ng-class="{'glyphicon-check': blogsEnabled, 'glyphicon-unchecked': !blogsEnabled}" class="glyphicon"></span> @{{ blogsEnabled ? 'Disable' : 'Enable' }} blogs</a></li>
-              <li ng-if="blogsEnabled"><a href ng-click="newBlog()"><span class="glyphicon glyphicon-plus"></span> Add blog</a></li>
-              <li ng-if="blogsEnabled"><a href ng-click="deleteBlog(selectedPage)"><span class="glyphicon glyphicon-minus"></span> Remove blog</a></li>
-
-              {{-- Extra divider for the user actions --}}
-              <li class="divider"></li>
-            @endif
-
             {{-- Display registration link if not logged in and registration is enabled --}}
-            @if( !\Auth::check() && Config::get('board::app.user-registration') == 'yes' )
-              <li><a href ng-click="register()"><span class="glyphicon glyphicon-plus"></span> Register</a></li>
+            @if( Config::get('board::app.user-registration') == 'yes' )
+              <li ng-if="!$storage.token"><a href ng-click="register()"><span class="glyphicon glyphicon-plus"></span> Register</a></li>
             @endif
 
             {{-- Display login if not logged in, otherwise display logout --}}
-            @if( !\Auth::check() )
-              <li><a href ng-click="login()"><span class="glyphicon glyphicon-minus"></span> Login</a></li>
-            @else
-              <li><a href ng-click="logout()"><span class="glyphicon glyphicon-check"></span> Logout</a></li>
-            @endif
+            <li ng-if="!$storage.token"><a href ng-click="login()"><span class="glyphicon glyphicon-minus"></span> Login</a></li>
+            <li ng-if="$storage.token"><a href ng-click="logout()"><span class="glyphicon glyphicon-check"></span> Logout</a></li>
 
           </ul>
+
         </li>
       </ul>
 

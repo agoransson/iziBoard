@@ -23,6 +23,8 @@
 
 * Finally set the folder permissions for ```my-project/app/storage```
 
+* Delete User.php
+
 ## Configuration
 
 This package comes with some configuration options, to change them for your installation run the following command.

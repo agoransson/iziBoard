@@ -39,12 +39,20 @@ class BoardServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->app->register('Intervention\Image\ImageServiceProvider');
+		$this->app->register('Cartalyst\Sentry\SentryServiceProvider');
+
 
 		$this->app['izi.init'] = $this->app->share(function () {
 			return new Commands\InitBoardCommand();
 		});
 
 		$this->commands('izi.init');
+
+		$this->app['izi.user'] = $this->app->share(function () {
+			return new Commands\UserControlCommand();
+		});
+
+		$this->commands('izi.user');
 	}
 
 	public function boot()
@@ -52,19 +60,17 @@ class BoardServiceProvider extends ServiceProvider {
 		$this->package('wetcat/board');
 
     include __DIR__.'/../../routes.php';
-		//include __DIR__.'/../../filters.php';
-
-    // AuthToken
-		$this->app->register('Tappleby\AuthToken\AuthTokenServiceProvider');
+		include __DIR__.'/../../filters.php';
 
     $this->app->booting(function()
 		{
 		  $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+
 		  // Intervention
 		  $loader->alias('Image', 'Intervention\Image\Facades\Image');
-		  // AuthToken
-		  $loader->alias('AuthToken', 'Tappleby\Support\Facades\AuthToken');
-		  $loader->alias('AuthTokenNotAuthorizedException', 'Tappleby\AuthToken\Exceptions\NotAuthorizedException');
+
+		  // Sentry
+		  $loader->alias('Sentry', 'Cartalyst\Sentry\Facades\Laravel\Sentry');
 		});
 
 	}

@@ -17,7 +17,7 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger', 'cfp.hotkeys']);
+var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-maps', 'placeholders', 'angularFileUpload', 'ngSanitize', 'tagger', 'cfp.hotkeys', 'ngStorage']);
 
 
 iziControllers.controller('PageController', function ($scope, $http, CSRF_TOKEN, hotkeys) {
@@ -536,7 +536,12 @@ iziControllers.controller('BlogController', function ($scope, $http){
 
 
 
-iziControllers.controller('UserController', function ($scope, $http, CSRF_TOKEN) {
+iziControllers.controller('UserController', function ($scope, $http, $sessionStorage, CSRF_TOKEN) {
+
+  $scope.$storage = $sessionStorage;
+  $scope.$storage.permission = [];
+
+  $http.defaults.headers.common['X-Auth-Token'] = $scope.$storage.token;
 
   $scope.register = function () {
     var user = {
@@ -549,11 +554,18 @@ iziControllers.controller('UserController', function ($scope, $http, CSRF_TOKEN)
 
   $scope.login = function () {
     var user = {
-      _token: CSRF_TOKEN
+      _token: CSRF_TOKEN,
+      email: 'admin@admin.se',
+      password: 'admin'
     };
-    $http.post('users/login', user).success(function (data) {
-      console.log(data);
+    $http.post('users/login', user)
+    .success(function (data, status, headers, config) {
+      setToken(data.token, data.permissions);
+    })
+    .error(function (data, status, headers, config) {
+      delToken();
     });
+      
   }
 
   $scope.logout = function () {
@@ -561,8 +573,24 @@ iziControllers.controller('UserController', function ($scope, $http, CSRF_TOKEN)
       _token: CSRF_TOKEN
     };
     $http.post('users/logout', user).success(function (data) {
-      console.log(data);
+      delToken();
     });
+  }
+
+  function setToken (token, permissions) {
+    $scope.$storage.token = token;
+    $http.defaults.headers.common['X-Auth-Token'] = token;
+    $scope.$storage.permissions = permissions;
+
+    console.log( $scope.$storage.permissions );
+  }
+
+  function delToken () {
+    delete $scope.$storage.token;
+  }
+
+  $scope.isAdmin = function () {
+    return $scope.$storage.token && ('admin' in $scope.$storage.permissions) && ($scope.$storage.permissions.admin == 1);
   }
 
 });

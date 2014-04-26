@@ -18,3 +18,8 @@
  */
  
 var iziServices = angular.module('iziServices', []);
+
+
+iziServices.factory('Authenticate', function($resource){
+  return $resource("/authenticate")
+});
