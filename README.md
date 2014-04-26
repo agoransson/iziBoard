@@ -4,12 +4,14 @@
 
 ## Installation iziBoard
 
+* Create a laravel project ```composer create laravel/laravel my-project```
+
 * Add to composer.json
 ```"wetcat/board": "dev-master"```
 
-* Add service providers ```'Wetcat\Board\BoardServiceProvider',``` and ```'Cartalyst\Sentry\SentryServiceProvider',```
+* Add service providers ```'Wetcat\Board\BoardServiceProvider',```
 
-* Add aliases ```'Sentry' => 'Cartalyst\Sentry\Facades\Laravel\Sentry',```
+* Add aliases ```...```
 
 * Run ```composer install``` or ```composer update```
 
@@ -17,9 +19,15 @@
 
 * Publish the package config ```php artisan config:publish wetcat/board```
 
-* This package uses it's own routes, you must remove the root ('/') route in laravel.
+* Edit ```my-project/app/config/packages/wetcat/board/config.php/```
+
+* Remove the default root ```('/')``` route in ```my-project/app/routes.php``` because it will interfer with the routes in this package.
+
+* Edit database configuration in ```my-project/app/config/database.php``` 
 
 * Run database migrations ```php artisan migrate --package=cartalyst/sentry``` and ```php artisan migrate --package="wetcat/board"```
+
+* Finally set the folder permissions for ```my-project/app/storage```
 
 ## This package uses Intervention/Image 
 

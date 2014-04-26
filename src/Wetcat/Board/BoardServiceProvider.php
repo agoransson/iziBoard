@@ -39,6 +39,12 @@ class BoardServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->app->register('Intervention\Image\ImageServiceProvider');
+
+		$this->app['izi.init'] = $this->app->share(function () {
+			return new Commands\InitBoardCommand();
+		});
+
+		$this->commands('izi.init');
 	}
 
 	public function boot()
@@ -48,11 +54,19 @@ class BoardServiceProvider extends ServiceProvider {
     include __DIR__.'/../../routes.php';
 		//include __DIR__.'/../../filters.php';
 
+    // AuthToken
+		$this->app->register('Tappleby\AuthToken\AuthTokenServiceProvider');
+
     $this->app->booting(function()
 		{
 		  $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+		  // Intervention
 		  $loader->alias('Image', 'Intervention\Image\Facades\Image');
+		  // AuthToken
+		  $loader->alias('AuthToken', 'Tappleby\Support\Facades\AuthToken');
+		  $loader->alias('AuthTokenNotAuthorizedException', 'Tappleby\AuthToken\Exceptions\NotAuthorizedException');
 		});
+
 	}
 
 	/**

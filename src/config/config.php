@@ -37,8 +37,16 @@ return [
 
   'app' => array(
 
+    /*
+     * Set the title of this website.
+     */
     'name'  =>  'iziBoard',
 
+    /*
+     * This setting will allow new users to register on the website. The 
+     * 'admin' user will however always be created for you if you follow
+     * the setup instructions.
+     */
     'user-registration'  =>  'yes',
 
   ),
