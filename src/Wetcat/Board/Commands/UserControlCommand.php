@@ -47,7 +47,7 @@ class UserControlCommand extends Command {
 				$this->createAdmin($email, $password);
 				break;
 
-			case 'admin':
+			case 'user':
 				$email = $this->ask('Enter user email.');
 				$password = $this->secret('Enter password.');
 
@@ -107,6 +107,41 @@ class UserControlCommand extends Command {
 
 		    // Assign the group to the user
 		    $user->addGroup($adminGroup);
+		}
+		catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
+		{
+		    echo 'Login field is required.';
+		}
+		catch (Cartalyst\Sentry\Users\PasswordRequiredException $e)
+		{
+		    echo 'Password field is required.';
+		}
+		catch (Cartalyst\Sentry\Users\UserExistsException $e)
+		{
+		    echo 'User with this login already exists.';
+		}
+		catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e)
+		{
+		    echo 'Group was not found.';
+		}
+	}
+
+	private function createUser($email, $password)
+	{
+		try
+		{
+		    // Create the user
+		    $user = \Sentry::createUser(array(
+		        'email'     => $email,
+		        'password'  => $password,
+		        'activated' => true,
+		    ));
+
+		    // Find the group using the group id
+		    $userGroup = \Sentry::findGroupByName('Users');
+
+		    // Assign the group to the user
+		    $user->addGroup($userGroup);
 		}
 		catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
 		{

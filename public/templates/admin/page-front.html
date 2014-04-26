@@ -16,7 +16,7 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  -->
-<li class="dropdown page-type-selection">
+<li class="dropdown page-type-selection" ng-if="isAdmin()">
   <a class="dropdown-toggle">
     {{ page.type }}
   </a>
@@ -28,7 +28,9 @@
 </li>
 
 <div class="row">
-  <div class="col-md-8 col-xs-12" ng-controller="ImageController">
+
+  <div class="col-md-8 col-xs-12" ng-controller="ImageController" ng-if="isAdmin()">
+    <!-- Admin image controls -->
     <div ng-if="(+page.images.length > 0)" ng-file-drop="onFilePost($files, page, 'Page')" ng-file-drag-over-class="optional-css-class">
       <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
     </div>
@@ -37,25 +39,60 @@
     </div>
   </div>
 
-  <div class="col-md-4 visible-md visible-lg news-container">
+  <div class="col-md-8 col-xs-12" ng-controller="ImageController" ng-if="!isAdmin()">
+    <!-- User image controls -->
+    <div ng-if="(+page.images.length > 0)">
+      <img class="img-responsive" ng-src="uploads/{{ page.images[page.images.length-1].filename }}" />
+    </div>
+
+    <div ng-if="(+page.images.length <= 0)">
+      <img class="img-rounded img-responsive" ph-img="800x400" ph-txt="No image found"/>
+    </div>
+  </div>
+
+  <div class="col-md-4 visible-md visible-lg news-container" ng-if="isAdmin()">
+    <!-- Admin news controls -->
     <h2>De senaste nyheterna <small><span class="glyphicon glyphicon-plus-sign" ng-click="openNewsModal()" tooltip="Add news item" tooltip-placement="bottom"></span></small></h2>
     <div ng-repeat="n in news | limitTo: quantity | orderBy:orderProp:orderType" class="news-item" ng-include="'packages/wetcat/board/templates/partials/news-item-small.html'">
       <!-- Dynamic section template used -->
     </div>
   </div>
+
+  <div class="col-md-4 visible-md visible-lg" ng-controller="NewsController" ng-if="!isAdmin()">
+    <!-- User news controls -->
+    <h2>De senaste nyheterna</h2>
+    <div ng-repeat="n in news | limitTo: quantity | orderBy:orderProp:orderType" class="news-item" ng-include="'packages/wetcat/board/templates/partials/news-item-small.html'">
+      <!-- Dynamic section template used -->
+    </div>
+  </div>
+
 </div>
 
 <div class="row" ng-controller="TextController">
-  <div class="col-xs-12">
+
+  <div class="col-xs-12" ng-if="isAdmin()">
     <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
     <h1 class="fix-heading"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)" tooltip="Save page" tooltip-placement="bottom"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newTextable(page, 'Page', 'Lipsum...')" tooltip="Add text" tooltip-placement="bottom"></span></small></h1>
   </div>
 
-  <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0)">
+  <div class="col-xs-12" ng-if="!isAdmin()">
+    <!-- User text controls -->
+    <h1>{{ page.heading }}</h1>
+  </div>
+
+  <div class="col-md-{{ 12 / page.texts.length }} edit-menu" ng-repeat="text in page.texts" ng-if="(+page.texts.length > 0 && isAdmin())">
+    <!-- Admin text controls -->
     <textarea msd-elastic class="vert" ng-model="text.description" btf-markdown="text.description"></textarea>
     <span class="glyphicon glyphicon-remove-sign remove-button" ng-click="deleteText(text)" tooltip="Remove" tooltip-placement="bottom"></span>
   </div>
-  <div ng-if="(+page.texts.length <= 0)">
+  <div ng-if="(+page.texts.length <= 0 && isAdmin())">
+    <!-- Admin text controls -->
     <div ng-include="'packages/wetcat/board/templates/partials/add-one-column.html'"></div>
   </div>
+
+
+  <div class="col-md-{{ 12 / page.texts.length }}" ng-repeat="text in page.texts" ng-controller="TextController" ng-if="(+page.texts.length > 0 && !isAdmin())">
+    <p ng-model="text.description" btf-markdown="text.description"></p>
+  </div>
+
 </div>

@@ -536,7 +536,7 @@ iziControllers.controller('BlogController', function ($scope, $http){
 
 
 
-iziControllers.controller('UserController', function ($scope, $http, $sessionStorage, CSRF_TOKEN) {
+iziControllers.controller('UserController', function ($scope, $http, $sessionStorage, CSRF_TOKEN, $modal, $log) {
 
   $scope.$storage = $sessionStorage;
   $scope.$storage.permission = [];
@@ -553,19 +553,34 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
   }
 
   $scope.login = function () {
-    var user = {
-      _token: CSRF_TOKEN,
-      email: 'admin@admin.se',
-      password: 'admin'
-    };
-    $http.post('users/login', user)
-    .success(function (data, status, headers, config) {
-      setToken(data.token, data.permissions);
-    })
-    .error(function (data, status, headers, config) {
-      delToken();
+    // Open modal
+    var modalInstance = $modal.open({
+      templateUrl: 'packages/wetcat/board/templates/loginModalContent.html',
+      controller: LoginInstanceCtrl,
+      resolve: {
+        item: function () {
+          return '';
+        }
+      }
     });
-      
+
+    modalInstance.result.then(function (selectedItem) {
+      var user = {
+        _token: CSRF_TOKEN,
+        email: selectedItem.email,
+        password: selectedItem.password
+      };
+      $http.post('users/login', user)
+      .success(function (data, status, headers, config) {
+        setToken(data.token, data.permissions);
+      })
+      .error(function (data, status, headers, config) {
+        delToken();
+      });
+
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
   }
 
   $scope.logout = function () {
@@ -593,4 +608,35 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
     return $scope.$storage.token && ('admin' in $scope.$storage.permissions) && ($scope.$storage.permissions.admin == 1);
   }
 
+  $scope.isUser = function () {
+    return $scope.$storage.token && ('user' in $scope.$storage.permissions) && ($scope.$storage.permissions.user == 1);
+  }
+
+  $scope.isPublic = function () {
+    return !$scope.$storage.token;
+  }
+
+
 });
+
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+var LoginInstanceCtrl = function ($scope, $modalInstance, item) {
+
+  if( item ){
+    $scope.useritem = item;
+  }else{
+    $scope.useritem = {};
+  }
+
+  $scope.loginModalOk = function () {
+    $modalInstance.close($scope.useritem);
+  };
+
+  $scope.loginModalCancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+}
