@@ -575,8 +575,6 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
       $http.post('users/login', user)
       .success(function (data, status, headers, config) {
         setToken(data.token, data.permissions);
-        $scope.flash.message = data.flash;
-        $scope.flash.type = 'error';
       })
       .error(function (data, status, headers, config) {
         delToken();
