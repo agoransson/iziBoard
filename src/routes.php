@@ -347,7 +347,7 @@ Route::post('users/login', function(){
 
 
   return Response::json([
-    'flash' => 'Authentication failed',
+    'type' => 'danger',
     'messages' => $messages
   ], 401);
 

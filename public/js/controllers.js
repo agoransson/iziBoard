@@ -538,6 +538,8 @@ iziControllers.controller('BlogController', function ($scope, $http){
 
 iziControllers.controller('UserController', function ($scope, $http, $sessionStorage, CSRF_TOKEN, $modal, $log) {
 
+  $scope.alerts = [];
+
   $scope.$storage = $sessionStorage;
   $scope.$storage.permission = [];
 
@@ -573,9 +575,15 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
       $http.post('users/login', user)
       .success(function (data, status, headers, config) {
         setToken(data.token, data.permissions);
+        $scope.flash.message = data.flash;
+        $scope.flash.type = 'error';
       })
       .error(function (data, status, headers, config) {
         delToken();
+      
+        for (var i=0; i<data.messages.length; i++){ 
+          addAlert({ type: data.type, msg: data.messages[i] });
+        }
       });
 
     }, function () {
@@ -592,6 +600,11 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
     })
     .error(function (data, status, headers, config) {
       delToken();
+
+      for (var i=0; i<data.messages.length; i++){ 
+        addAlert({ type: data.type, msg: data.messages[i] });
+      }
+      
     });
   }
 
@@ -599,8 +612,6 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
     $scope.$storage.token = token;
     $http.defaults.headers.common['X-Auth-Token'] = token;
     $scope.$storage.permissions = permissions;
-
-    console.log( $scope.$storage.permissions );
   }
 
   function delToken () {
@@ -621,6 +632,15 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
     return !$scope.$storage.token;
   }
 
+
+  addAlert = function(messageObj) {
+    $scope.alerts.splice(0, $scope.alerts.length);
+    $scope.alerts.push(messageObj);
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
 
 });
 

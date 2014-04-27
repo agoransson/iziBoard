@@ -42,7 +42,13 @@
 
 
     <div ng-controller="PageController">
+
       @include('board::layouts.nav')
+
+      
+      <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">@{{ alert.msg }}</alert>
+      
+
       <div class="container main-content" ng-controller="NewsController">
         @section('content')
         @show
