@@ -81,29 +81,17 @@ class InitBoardCommand extends Command {
 
     // Publish config
     if( !$bench ){
-      $this->call(
+      /*$this->call(
         'config:publish', array('wetcat/board')
-      );
+      );*/
     } else {
       // php artisan config:publish --path="workbench/wetcat/board/src/config/" wetcat/board
       /*$this->call(
         'config:publish', array('--path' => 'workbench/wetcat/board/src/config/', 'wetcat/board')
       );*/
     }
-    $this->info('Configs finished!');
-
-
-
-    // Add the admin user
-    if( !$bench ) {
-      /*$this->call(
-      	'db:seed', array('--class' => 'UserTableSeeder')
-      );*/
-    } else {
-      // ?
-    }
-    $this->info('Seeds finished!');
-
+    //$this->info('Configs finished!');
+    $this->info('Manually run: php artisan config:publish wetcat/board');
 
 
     // Create default admin group
