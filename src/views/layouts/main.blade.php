@@ -37,6 +37,14 @@
     {{ HTML::style('packages/wetcat/board/lib/hotkeys.min.css') }}
 
     {{ HTML::style('packages/wetcat/board/css/iziboard.css') }}
+
+    {{-- Include the custom styles for this installation --}}
+    @if( file_exists('public/css/'.Config::get('board::app.name').'.min.css'))
+      {{ HTML::style('css/'.Config::get('board::app.name').'.min.css') }}
+    @elseif( file_exists('public/css/'.Config::get('board::app.name').'.css'))
+      {{ HTML::style('css/'.Config::get('board::app.name').'.css') }}
+    @endif
+
   </head>
   <body ng-controller="UserController">
 
