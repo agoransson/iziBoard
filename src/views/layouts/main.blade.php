@@ -25,9 +25,9 @@
     <title>{{ Config::get('board::app.name') }}</title>
 
     {{-- Always attempt to load local bootstrap styles before going to CDN --}}
-    @if( file_exists('css/bootstrap.min.css') )
+    @if( file_exists('public/css/bootstrap.min.css') )
       {{ HTML::style('css/bootstrap.min.css') }}
-    @elseif( file_exists('css/bootstrap.css') )
+    @elseif( file_exists('public/css/bootstrap.css') )
       {{ HTML::style('css/bootstrap.css') }}
     @else
       {{ HTML::style(Config::get('board::cdn.bootstrap')) }}
