@@ -602,6 +602,8 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
 
   function delToken () {
     delete $scope.$storage.token;
+    delete $scope.$storage.permissions;
+    $http.defaults.headers.common['X-Auth-Token'] = '';
   }
 
   $scope.isAdmin = function () {
