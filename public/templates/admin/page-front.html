@@ -49,17 +49,9 @@
     </div>
   </div>
 
-  <div class="col-md-4 visible-md visible-lg news-container" ng-if="isAdmin()">
+  <div class="col-md-4 visible-md visible-lg news-container">
     <!-- Admin news controls -->
-    <h2>De senaste nyheterna <small><span class="glyphicon glyphicon-plus-sign" ng-click="openNewsModal()" tooltip="Add news item" tooltip-placement="bottom"></span></small></h2>
-    <div ng-repeat="n in news | limitTo: quantity | orderBy:orderProp:orderType" class="news-item" ng-include="'packages/wetcat/board/templates/partials/news-item-small.html'">
-      <!-- Dynamic section template used -->
-    </div>
-  </div>
-
-  <div class="col-md-4 visible-md visible-lg" ng-controller="NewsController" ng-if="!isAdmin()">
-    <!-- User news controls -->
-    <h2>De senaste nyheterna</h2>
+    <h2>De senaste nyheterna <small ng-if="isAdmin()"><span class="glyphicon glyphicon-plus-sign" ng-click="openNewsModal()" tooltip="Add news item" tooltip-placement="bottom"></span></small></h2>
     <div ng-repeat="n in news | limitTo: quantity | orderBy:orderProp:orderType" class="news-item" ng-include="'packages/wetcat/board/templates/partials/news-item-small.html'">
       <!-- Dynamic section template used -->
     </div>
