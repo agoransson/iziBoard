@@ -589,6 +589,9 @@ iziControllers.controller('UserController', function ($scope, $http, $sessionSto
     };
     $http.post('users/logout', user).success(function (data) {
       delToken();
+    })
+    .error(function (data, status, headers, config) {
+      delToken();
     });
   }
 
