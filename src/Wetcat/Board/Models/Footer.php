@@ -21,14 +21,19 @@ use \Illuminate\Database\Eloquent\Model as Eloquent;
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-class Page extends Eloquent {
+class Footer extends Eloquent {
 
-  protected $table = 'pages';
+  protected $table = 'footers';
 
   protected $softDelete = true;
 
-  protected $fillable = array('type', 'title', 'heading');    
+  protected $fillable = array('type', 'title');    
 
+
+  public function footable()
+  {
+    return $this->morphTo();
+  }
 
   public function texts()
   {
@@ -40,18 +45,4 @@ class Page extends Eloquent {
     return $this->morphMany('Wetcat\Board\Models\Photo', 'imageable');
   }
 
-  public function markers()
-  {
-    return $this->morphMany('Wetcat\Board\Models\Marker', 'markerable');
-  }
-
-  public function blogposts()
-  {
-    return $this->morphMany('Wetcat\Board\Models\Blogpost', 'blogpostable');
-  }
-
-  public function accordions()
-  {
-    return $this->morphMany('Wetcat\Board\Models\Accordion', 'accordable');
-  }
 }

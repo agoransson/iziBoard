@@ -1,0 +1,68 @@
+<!--
+  iziBoard
+  Copyright (C) 2014  Andreas Göransson
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ -->
+<li class="dropdown page-type-selection" ng-if="isAdmin()">
+  <a class="dropdown-toggle">
+    {{ page.type }}
+  </a>
+  <ul class="dropdown-menu">
+    <li ng-repeat="type in pageTypes">
+      <a ng-click="setPageType(type)">{{ type }}</a>
+    </li>
+  </ul>
+</li>
+
+<div class="row" ng-controller="AccordController">
+
+  <div class="col-xs-12" ng-if="isAdmin()">
+    <input class="admin-input h1" type="text" ng-model="page.heading" placeholder="add your headline here" />
+    <h1 class="fix-heading pull-right"><small><span class="glyphicon glyphicon-ok-sign" ng-click="savePage(page)" tooltip="Save" tooltip-placement="bottom"></span> <span class="glyphicon glyphicon-plus-sign" ng-click="newAccordion(page, 'Page', 'Min fråga', 'Mitt svar')" tooltip="Add question" tooltip-placement="bottom"></span></small></h1>
+  </div>
+  <div class="col-xs-12" ng-if="!isAdmin()">
+    <h1 ng-model="page.heading">{{ page.heading }}</h1>
+  </div>
+
+
+
+  <div class="col-xs-12">
+    <div ng-controller="AccordController">
+      <accordion close-others="true">
+        <accordion-group ng-repeat="accordion in page.accordions" is-open="isopen">
+          <accordion-heading>
+            <input class="admin-input p" type="text" ng-model="accordion.title" placeholder="add your headline here" ng-if="isAdmin()" />
+            <span ng-if="!isAdmin()">{{ accordion.title }}</span>
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"></i>
+            
+            <span ng-if="isAdmin()" class="pull-right glyphicon glyphicon-ok-sign" style="margin-right: 1em" ng-click="saveAccordion(accordion)" tooltip="Save" tooltip-placement="bottom"></span> <span ng-if="isAdmin()" class="pull-right glyphicon glyphicon-remove-sign" style="margin-right: 1em;" ng-click="deleteAccordion(accordion)" tooltip="Remove" tooltip-placement="bottom"></span>
+
+          </accordion-heading>
+            <textarea msd-elastic class="vert" ng-model="accordion.body" btf-markdown="accordion.body" ng-if="isAdmin()"></textarea>
+            <span ng-if="!isAdmin()">{{ accordion.body }}</span>
+        </accordion-group>
+      </accordion>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+

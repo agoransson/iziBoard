@@ -22,6 +22,7 @@ var iziControllers = angular.module('iziControllers', ['ui.bootstrap', 'google-m
 
 iziControllers.controller('PageController', function ($scope, $http, CSRF_TOKEN, hotkeys) {
 
+
   // Init save action on ctrl+s
   hotkeys.add({
     combo: 'ctrl+s',
@@ -37,7 +38,7 @@ iziControllers.controller('PageController', function ($scope, $http, CSRF_TOKEN,
     $scope.selectedPage = $scope.pages[0];
   }); 
 
-  $scope.pageTypes = ['front', 'text', 'news', 'carousel', 'maps'];
+  $scope.pageTypes = ['front', 'text', 'news', 'carousel', 'maps', 'faq'];
 
   // TODO: Do a GET on settings for products (if it's enabled)
   $scope.productsEnabled = true;
@@ -161,18 +162,47 @@ iziControllers.controller('PageController', function ($scope, $http, CSRF_TOKEN,
     }
   }
 
+  // This should be fixed for polymorhpism
+  $scope.newTextable = function (container, containerType, text) {
+    if( $scope.selectedPage.texts.length < 4 ) {
+      var txt = {id: container.id, type: containerType, description: text};
+      $http.post('textables', txt).success(function (data){
+        $scope.selectedPage.texts.push(data);
+      });  
+    } else {
+      addAlert({ type: 'warning', msg: "There can only be 4 text columns"});
+    }
+  }
+
 });
+
+
+
+
+
 
 iziControllers.controller('TextController', function ($scope, $http, hotkeys) {
 
   // This should be fixed for polymorhpism
   $scope.newTextable = function (container, containerType, text) {
-    if( $scope.selectedPage.texts.length < 4 ){
-      var txt = {id: container.id, type: containerType, description: text};
-      $http.post('textables', txt).success(function (data){
-        $scope.selectedPage.texts.push(data);
-      });  
-    }
+    var txt = {id: container.id, type: containerType, description: text};
+    $http.post('textables', txt).success(function (data){
+      $scope.selectedPage.texts.push(data);
+    }).error(function (data, status, headers, config) {
+      for (var i = 0; i < data.messages.length; i++){ 
+        addAlert({ type: data.type, msg: data.messages[i] });
+      }
+    });  
+  }
+
+  $scope.updateText = function (text) {
+    $http.put('textables', text).success(function (data, status, headers, config) {
+      addAlert({ type: 'success', msg: 'Text updated'});
+    }).error(function (data, status, headers, config) {
+      for (var i = 0; i < data.messages.length; i++){ 
+        addAlert({ type: data.type, msg: data.messages[i] });
+      }
+    });
   }
 
   $scope.deleteText = function (text) {
@@ -184,6 +214,8 @@ iziControllers.controller('TextController', function ($scope, $http, hotkeys) {
   $scope.numCombined = "2p3s";
 
 });
+
+
 
 
 
@@ -445,8 +477,80 @@ var NewsInstanceCtrl = function ($scope, $modalInstance, $http, item) {
 
 
 
+iziControllers.controller('AccordController', function ($scope, $http) {
+ 
+
+  $scope.newAccordion = function (accordOwner, ownerType, title, body) {
+    var accordion = {
+      title: title,
+      body: body,
+      id: accordOwner.id,
+      type: ownerType
+    }
+
+    $http.post('accordions', accordion).success( function (data, status, headers, config) {
+      $scope.selectedPage.accordions.push( data );
+    }).error( function (data, status, headers, config) {
+      console.log(data);
+    });
+  }
+
+  $scope.saveAccordion = function (accordion) {
+    $http.put('accordions', accordion).success( function (data, status, headers, config) {
+      console.log(data);
+    }).error( function (data, status, headers, config) {
+      console.log(data);
+    });
+  }
+
+  $scope.deleteAccordion = function (accordion) {
+    var index = $scope.selectedPage.accordions.indexOf(accordion);
+    $http.delete('accordions/'+accordion.id).success( function (data, status, headers, config) {
+      $scope.selectedPage.accordions.splice(index,1);
+      console.log('success');
+    }).error( function (data, status, headers, config) {
+      console.log(data);
+    });
+  }
+
+});
+
+
+
 
 iziControllers.controller('FooterController', function ($scope, $http){
+
+  $http.get('footers').success( function (data, status, headers, config) {
+    $scope.footers = data;
+  }).error(function (data, status, headers, config) {
+    //delToken();
+    for (var i=0; i<data.messages.length; i++){ 
+      addAlert({ type: data.type, msg: data.messages[i] });
+    }
+  });
+
+  $scope.newFooter = function (title, type) {
+    if( $scope.footers.length < 4 ) {
+      var footer = {
+        title: title,
+        type: type
+      }
+      $http.post('footer', footer).success( function (data, status, headers, config) {
+        
+      }).error( function (data, status, headers, config) {
+        delToken();
+        for (var i=0; i<data.messages.length; i++){ 
+          addAlert({ type: data.type, msg: data.messages[i] });
+        }
+      });
+    } else {
+      addAlert({ type: 'warning', msg: "There can only be 4 footer columns"});
+    }
+  }
+
+  $scope.saveFooter = function (footer) {
+    $http.put('footer', footer);
+  }
 
 });
 

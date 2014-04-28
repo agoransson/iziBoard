@@ -37,6 +37,8 @@ use Wetcat\Board\Models\Photo;
 use Wetcat\Board\Models\Text;
 use Wetcat\Board\Models\Category;
 use Wetcat\Board\Models\Blogpost;
+use Wetcat\Board\Models\Footer;
+use Wetcat\Board\Models\Accordion;
 
 
 
@@ -49,7 +51,7 @@ Route::resource('authenticate', 'AuthenticationController');
 /* ============ PAGE ============= */
 
 Route::get('pages', function(){
-  return Page::with(array('texts', 'images', 'markers', 'blogposts', 'blogposts.images', 'blogposts.texts'))->get();
+  return Page::with(array('texts', 'images', 'markers', 'blogposts', 'blogposts.images', 'blogposts.texts', 'accordions'))->get();
 });
 
 Route::group(array('before' => 'iziAuth|iziAdmin'), function()
@@ -60,7 +62,7 @@ Route::group(array('before' => 'iziAuth|iziAdmin'), function()
   });
 
   Route::put('pages', function(){
-    $page = Page::find(Input::get('id'))->update(Input::all());
+    $page = Page::find(Input::get('id'))->update(Input::only('title', 'body'));
     $texts = Input::get('texts');
 
     foreach($texts as $text){
@@ -375,6 +377,61 @@ Route::group(array('before' => 'iziAuth'), function()
 
 
 
+
+/* ============ FOOTER ============= */
+
+Route::get('footer/{id}', function($id){
+  $footer = Footer::find($id);
+  return $footer;
+});
+
+Route::get('footers', function(){
+  $footers = Footer::all();
+  return $footers;
+});
+
+Route::group(array('before' => 'iziAuth|iziAdmin'), function()
+{
+  Route::post('footer', function(){
+    $footer = Footer::create(Input::only('type', 'title'));
+    return $footer;
+  });
+
+  Route::put('footer', function(){
+    $footer = Footer::find(Input::get('id'));
+    $footer->update(Input::all());
+    return $footer;
+  });
+});
+
+
+Route::group(array('before' => 'iziAuth|iziAdmin'), function()
+{
+  Route::post('accordions', function(){
+    $accordion = Accordion::create(Input::only('title', 'body'));
+
+    if( Input::has('id') && Input::get('id') != 'undefined' ){
+      $containerId = Input::get('id');
+      $containerType = 'Wetcat\\Board\\Models\\'.Input::get('type');
+      $container = $containerType::find($containerId);
+      $container->accordions()->save($accordion);
+    }
+
+    return $accordion;
+  });
+
+  Route::put('accordions', function(){
+    $accordion = Accordion::find(Input::get('id'));
+    $accordion->update(Input::all());
+    return $accordion;
+  });
+
+  Route::delete('accordions/{id}', function($id){
+    $accordion = Accordion::find($id);
+    $accordion->delete();
+    return $accordion;
+  });
+});
 
 
 

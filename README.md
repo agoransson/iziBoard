@@ -40,6 +40,10 @@ You can also change what bootstrap CDN to use in the config.
 
 Note that if you're using a locally stored bootstrap stylesheet you will likely need to install the glyphicon set locally as well, bootstrap uses [Glyphicon halflings set](http://glyphicons.com/)
 
+Recommended is to use [http://pikock.github.io/bootstrap-magic/app/index.html#!/editor](http://pikock.github.io/bootstrap-magic/app/index.html#!/editor) or similar tool to generate the css. Don't forget the fonts!
+
+You can also add your own custom styles to ```public/css/my-project.css``` or ```public/css/my-project.min.css```, just make sure to set the my-project title in the config for your installation for this to work.
+
 ## Credits
 
 ### Frameworks used for iziBoard
