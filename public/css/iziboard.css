@@ -17,6 +17,41 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* Social icons */
+/* http://drinchev.github.io/monosocialiconsfont/ */
+@font-face {
+    font-family: 'Mono Social Icons Font';
+    src: url('../fonts/MonoSocialIconsFont-1.10.eot');
+    src: url('../fonts/MonoSocialIconsFont-1.10.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/MonoSocialIconsFont-1.10.woff') format('woff'),
+         url('../fonts/MonoSocialIconsFont-1.10.ttf') format('truetype'),
+         url('../fonts/MonoSocialIconsFont-1.10.svg#MonoSocialIconsFont') format('svg');
+    src: url('../fonts/MonoSocialIconsFont-1.10.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.symbol, a.symbol:before {
+    font-family: 'Mono Social Icons Font';
+    -webkit-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+a.symbol:before {
+    content: attr(title);
+    margin-right: 0.3em;
+    font-size: 130%;
+}
+  
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -25,14 +60,14 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 360px;
+  margin-bottom: 450px;
 }
 #footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 300px;
+  height: 370px;
   background-color: #f5f5f5;
   padding: 2em 0 2em 0;
 }
@@ -147,4 +182,17 @@ textarea:focus {
   border-color: #66AFE9;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0,075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
   outline: 0 none;
+}
+
+
+/* Social links */
+.social-link { font-size: 3em; text-align: center; }
+.social-link:link { text-decoration:none; }
+.social-link:visited { text-decoration:none; }
+.social-link:hover { text-decoration:none; cursor: pointer; }
+.social-link:active { text-decoration:none; }
+
+
+.footer-url {
+  text-align: center;
 }

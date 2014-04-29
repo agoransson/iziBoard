@@ -39,6 +39,7 @@ use Wetcat\Board\Models\Category;
 use Wetcat\Board\Models\Blogpost;
 use Wetcat\Board\Models\Footer;
 use Wetcat\Board\Models\Accordion;
+use Wetcat\Board\Models\Url;
 
 
 
@@ -99,7 +100,9 @@ Route::group(array('before' => 'iziAuth|iziAdmin'), function()
   });
 
   Route::delete('textables/{id}', function($id){
-    $text = Text::find($id)->delete();
+    $text = Text::find($id);
+    $text->delete();
+    return $text;
   });
 
   Route::put('textables', function(){
@@ -386,7 +389,7 @@ Route::get('footer/{id}', function($id){
 });
 
 Route::get('footers', function(){
-  $footers = Footer::all();
+  $footers = Footer::with(array('texts', 'urls'))->get();
   return $footers;
 });
 
@@ -399,8 +402,41 @@ Route::group(array('before' => 'iziAuth|iziAdmin'), function()
 
   Route::put('footer', function(){
     $footer = Footer::find(Input::get('id'));
-    $footer->update(Input::all());
+
+    $texts = Input::get('texts');
+    foreach($texts as $text){
+      $txt = Text::find($text['id'])->update($text);
+    }
+
+    $footer->update(Input::only('title', 'type'));
+
     return $footer;
+  });
+
+  Route::delete('footer/{id}', function($id){
+    $footer = Footer::find($id);
+    $footer->delete();
+    return $footer;
+  });
+});
+
+
+
+
+/* ============ URL ICONS ============= */
+Route::group(array('before' => 'iziAuth|iziAdmin'), function()
+{
+  Route::post('url', function(){
+    $url = Url::create(Input::only('title', 'url'));
+    $footer = Footer::find(Input::get('id'));
+    $footer->urls()->save($url);
+    return $url;
+  });
+
+  Route::delete('url/{id}', function($id){
+    $url = Url::find($id);
+    $url->delete();
+    return $url;
   });
 });
 
@@ -433,7 +469,14 @@ Route::group(array('before' => 'iziAuth|iziAdmin'), function()
   });
 });
 
+Route::post('email', function () {
 
+  Mail::send('board::mails.contactform', Input::all(), function($message)
+  {
+      $message->to(Config::get('board::app.contact-email'), Input::get('name'))->subject('Contact form message');
+  });
+
+});
 
 /* ============ ROOT ============= */
 

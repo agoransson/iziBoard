@@ -1,0 +1,33 @@
+
+  <div class="modal-header">
+    <h3>Add URL</h3>
+  </div>
+  <div class="modal-body">
+
+    <div class="row">
+      <div class="col-xs-12">
+        <input class="form-control" type="text" placeholder="title" ng-model="url.title">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <input class="form-control" type="text" placeholder="url" ng-model="url.url">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>Denna ikon kommer renderas av din länk</h4>
+        <span class="symbol h1">circle{{ getUrlName(url.url) }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" ng-click="socialModalOk()">OK</button>
+      <button type="button" class="btn btn-warning" ng-click="socialModalCancel()">Cancel</button>
+    </div>
+  </div>

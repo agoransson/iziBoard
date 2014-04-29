@@ -31,7 +31,7 @@
 
     {{-- Footer administration links --}}
     <div class="col-xs-12" ng-if="isAdmin()">
-      <h1><small><span class="glyphicon glyphicon-plus-sign" ng-click="newFooter('Lipsum...', 'text')" tooltip="Add footer item" tooltip-placement="bottom"></span></small></h1>
+      <h1 class="pull-left" style="margin: 0; padding: 0;"><small><span class="glyphicon glyphicon-plus-sign" ng-click="newFooter('Lipsum...', 'text')" tooltip="Add footer item" tooltip-placement="bottom"></span></small></h1>
     </div>
 
     {{-- Footer items --}}
@@ -39,5 +39,9 @@
       <footer-item ng-include="'packages/wetcat/board/templates/footers/footer-'+footer.type+'.html'"></footer-item>
     </div>
 
+    {{-- Copy notice --}}
+    <div class="col-xs-12">
+      <p style="text-align: center;"><span class="glyphicon glyphicon-copyright-mark"></span> {{ Config::get('board::app.copy') }}</p>
+    </div>
   </div>
 @stop

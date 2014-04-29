@@ -49,6 +49,15 @@ return [
      */
     'user-registration'  =>  'yes',
 
+    /*
+     * This is the default webmaster email.
+     */
+    'contact-email' =>  'contact@iziboard.se',
+
+    /*
+     * This is the copyright information seen at the bottom of the footer
+     */
+    'copy'  =>  'Wetcat corp.'
   ),
 
 ];
